@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A195CF0E2B7E8D5F00635043 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = A195CF0D2B7E8D5F00635043 /* SocketIO */; };
+		A195CF102B7E96E300635043 /* RMSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195CF0F2B7E96E300635043 /* RMSocketManager.swift */; };
 		A1A00FBD2B7E4C8F006041C3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A00FBC2B7E4C8F006041C3 /* AppDelegate.swift */; };
 		A1A00FC12B7E4C8F006041C3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A00FC02B7E4C8F006041C3 /* ViewController.swift */; };
 		A1A00FC62B7E4C90006041C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1A00FC52B7E4C90006041C3 /* Assets.xcassets */; };
@@ -14,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A195CF0F2B7E96E300635043 /* RMSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMSocketManager.swift; sourceTree = "<group>"; };
 		A1A00FB92B7E4C8F006041C3 /* RocketMessager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RocketMessager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1A00FBC2B7E4C8F006041C3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A1A00FC02B7E4C8F006041C3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -27,6 +30,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1A00FD62B7E859D006041C3 /* SwiftProtobufPluginLibrary in Frameworks */,
+				A195CF0E2B7E8D5F00635043 /* SocketIO in Frameworks */,
+				A1A00FD42B7E859D006041C3 /* SwiftProtobuf in Frameworks */,
+				A1A00FD82B7E859D006041C3 /* protoc-gen-swift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,6 +61,7 @@
 			children = (
 				A1A00FBC2B7E4C8F006041C3 /* AppDelegate.swift */,
 				A1A00FC02B7E4C8F006041C3 /* ViewController.swift */,
+				A195CF0F2B7E96E300635043 /* RMSocketManager.swift */,
 				A1A00FC52B7E4C90006041C3 /* Assets.xcassets */,
 				A1A00FC72B7E4C90006041C3 /* LaunchScreen.storyboard */,
 				A1A00FCA2B7E4C90006041C3 /* Info.plist */,
@@ -77,6 +85,12 @@
 			dependencies = (
 			);
 			name = RocketMessager;
+			packageProductDependencies = (
+				A1A00FD32B7E859D006041C3 /* SwiftProtobuf */,
+				A1A00FD52B7E859D006041C3 /* SwiftProtobufPluginLibrary */,
+				A1A00FD72B7E859D006041C3 /* protoc-gen-swift */,
+				A195CF0D2B7E8D5F00635043 /* SocketIO */,
+			);
 			productName = RocketMessager;
 			productReference = A1A00FB92B7E4C8F006041C3 /* RocketMessager.app */;
 			productType = "com.apple.product-type.application";
@@ -105,6 +119,10 @@
 				Base,
 			);
 			mainGroup = A1A00FB02B7E4C8F006041C3;
+			packageReferences = (
+				A1A00FD22B7E859D006041C3 /* XCRemoteSwiftPackageReference "swift-protobuf" */,
+				A195CF0C2B7E8D5F00635043 /* XCRemoteSwiftPackageReference "socket" */,
+			);
 			productRefGroup = A1A00FBA2B7E4C8F006041C3 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -131,6 +149,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A195CF102B7E96E300635043 /* RMSocketManager.swift in Sources */,
 				A1A00FC12B7E4C8F006041C3 /* ViewController.swift in Sources */,
 				A1A00FBD2B7E4C8F006041C3 /* AppDelegate.swift in Sources */,
 			);
@@ -345,6 +364,48 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A195CF0C2B7E8D5F00635043 /* XCRemoteSwiftPackageReference "socket" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/socketio/socket.io-client-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		A1A00FD22B7E859D006041C3 /* XCRemoteSwiftPackageReference "swift-protobuf" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-protobuf.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.25.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A195CF0D2B7E8D5F00635043 /* SocketIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A195CF0C2B7E8D5F00635043 /* XCRemoteSwiftPackageReference "socket" */;
+			productName = SocketIO;
+		};
+		A1A00FD32B7E859D006041C3 /* SwiftProtobuf */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1A00FD22B7E859D006041C3 /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = SwiftProtobuf;
+		};
+		A1A00FD52B7E859D006041C3 /* SwiftProtobufPluginLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1A00FD22B7E859D006041C3 /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = SwiftProtobufPluginLibrary;
+		};
+		A1A00FD72B7E859D006041C3 /* protoc-gen-swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1A00FD22B7E859D006041C3 /* XCRemoteSwiftPackageReference "swift-protobuf" */;
+			productName = "protoc-gen-swift";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A1A00FB12B7E4C8F006041C3 /* Project object */;
 }
