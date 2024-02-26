@@ -5,6 +5,7 @@
 //  Created by Anton Makarenkov on 15.02.24.
 //
 
+import Combine
 import UIKit
 
 final class ViewController: UIViewController {
@@ -29,7 +30,7 @@ final class ViewController: UIViewController {
         
         setupLayout()
         socketManager = RMSocketManager()
-        socketManager?.prepareSocket()
+        socketManager?.connect("TM")
     }
     
     // MARK: - Private
