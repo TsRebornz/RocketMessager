@@ -12,11 +12,11 @@ app.get('/', function(req, res){
 
 
 http.listen(port, function(){
-  console.log('Listening on *:${port}');
+  console.log('Listening on *:' + port);
 });
 
 
-io.on('connect', function(clientSocket){
+io.on('connection', function(clientSocket){
   console.log('a user connected');
 
   clientSocket.on('disconnect', function(){
