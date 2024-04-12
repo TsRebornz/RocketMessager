@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1749C402BBEE95D00B7B9D6 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = A1A00FD32B7E859D006041C3 /* SwiftProtobuf */; };
+		A1749C412BBEE95D00B7B9D6 /* SwiftProtobufPluginLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = A1A00FD52B7E859D006041C3 /* SwiftProtobufPluginLibrary */; };
+		A1749C422BBEE95D00B7B9D6 /* protoc-gen-swift in Frameworks */ = {isa = PBXBuildFile; productRef = A1A00FD72B7E859D006041C3 /* protoc-gen-swift */; };
+		A1749C442BBEEB1900B7B9D6 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1749C432BBEEB1900B7B9D6 /* ChatViewController.swift */; };
 		A195CF0E2B7E8D5F00635043 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = A195CF0D2B7E8D5F00635043 /* SocketIO */; };
 		A195CF102B7E96E300635043 /* RMSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195CF0F2B7E96E300635043 /* RMSocketManager.swift */; };
 		A1A00FBD2B7E4C8F006041C3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A00FBC2B7E4C8F006041C3 /* AppDelegate.swift */; };
@@ -16,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A1749C432BBEEB1900B7B9D6 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		A195CF0F2B7E96E300635043 /* RMSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMSocketManager.swift; sourceTree = "<group>"; };
 		A1A00FB92B7E4C8F006041C3 /* RocketMessager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RocketMessager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1A00FBC2B7E4C8F006041C3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -30,10 +35,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1A00FD62B7E859D006041C3 /* SwiftProtobufPluginLibrary in Frameworks */,
+				A1749C422BBEE95D00B7B9D6 /* protoc-gen-swift in Frameworks */,
+				A1749C412BBEE95D00B7B9D6 /* SwiftProtobufPluginLibrary in Frameworks */,
+				A1749C402BBEE95D00B7B9D6 /* SwiftProtobuf in Frameworks */,
 				A195CF0E2B7E8D5F00635043 /* SocketIO in Frameworks */,
-				A1A00FD42B7E859D006041C3 /* SwiftProtobuf in Frameworks */,
-				A1A00FD82B7E859D006041C3 /* protoc-gen-swift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 				A1A00FC52B7E4C90006041C3 /* Assets.xcassets */,
 				A1A00FC72B7E4C90006041C3 /* LaunchScreen.storyboard */,
 				A1A00FCA2B7E4C90006041C3 /* Info.plist */,
+				A1749C432BBEEB1900B7B9D6 /* ChatViewController.swift */,
 			);
 			path = RocketMessager;
 			sourceTree = "<group>";
@@ -151,6 +157,7 @@
 			files = (
 				A195CF102B7E96E300635043 /* RMSocketManager.swift in Sources */,
 				A1A00FC12B7E4C8F006041C3 /* ViewController.swift in Sources */,
+				A1749C442BBEEB1900B7B9D6 /* ChatViewController.swift in Sources */,
 				A1A00FBD2B7E4C8F006041C3 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

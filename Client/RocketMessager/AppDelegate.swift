@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let screenBounds = UIScreen.main.bounds
         window = UIWindow(frame: screenBounds)
-        window?.rootViewController = ViewController()
+        window?.rootViewController = ChatViewController()
         window?.makeKeyAndVisible()
                 
         return true
