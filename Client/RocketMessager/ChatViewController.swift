@@ -38,6 +38,8 @@ final class TestMessageBuilder: MessageBuilder {
 // extract to own file
 final class ChatViewCollectionViewCell: UICollectionViewCell {
     
+    let textLabel = UILabel()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -48,22 +50,26 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
         fatalError("Not implemented")
     }
     
+    // MARK: - Public
+    
+    func setModel(_ model: MessageModel) {
+        textLabel.text = model.text
+    }
+    
     // MARK: - Layout
     
     private func setupLayout() {
-        let v = UILabel()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.backgroundColor = .yellow
-        contentView.addSubview(v)
         
-        v.text = "mmm"
+        textLabel.translatesAutoresizingMaskIntoConstraints = false
+        textLabel.backgroundColor = .yellow
+        contentView.addSubview(textLabel)
         
         NSLayoutConstraint.activate(
             [
-                v.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-                v.topAnchor.constraint(equalTo: contentView.topAnchor),
-                v.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-                v.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+                textLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                textLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
+                textLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                textLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
             ]
         )
     }
@@ -74,26 +80,27 @@ final class ChatViewController: UIViewController {
     private let messageBuilder: MessageBuilder = TestMessageBuilder()
     private lazy var messages: [MessageModel] = messageBuilder.build()
     
+    // MARK: - View lifecycle
+    
     override func viewDidLoad() {
         setupLayout()
     }
     
     // MARK: - Public
     
-    private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.dataSource = self
-        
-        return collectionView
-    }()
-    
     // MARK: - Private
     
     // MARK: - Private methods
     
     private func setupLayout() {
+        // FIXME: - Extract UICollectionView building
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.register(cell: ChatViewCollectionViewCell.self)
+        collectionView.dataSource = self
         view.addSubview(collectionView)
+                        
         NSLayoutConstraint.activate(
             [
                 collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -110,8 +117,16 @@ extension ChatViewController: UICollectionViewDataSource {
         return messages.count
     }
     
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        1
+    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
+        guard let cell: ChatViewCollectionViewCell = collectionView.dequeue(for: indexPath) else {
+            return UICollectionViewCell()
+        }
+        let model = messages[indexPath.row]
+        cell.setModel(model)
         return cell
     }
 }
