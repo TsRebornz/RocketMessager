@@ -16,9 +16,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let screenBounds = UIScreen.main.bounds
         window = UIWindow(frame: screenBounds)
-        window?.rootViewController = ChatViewController()
+        
+        let navigationController = UINavigationController()
+        // FIXME: - Ref. Builder or dependency injection
+        let viewController = ChatViewController()
+        viewController.navigationItem.titleView = RMNavigationControllerTitleView()
+        navigationController.setViewControllers([viewController], animated: false)
+        
+        
+        window?.rootViewController = navigationController
+        
         window?.makeKeyAndVisible()
                 
         return true
     }
 }
+
+final class RMNavigationControllerTitleView: UIView {
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        setupLayout()
+    }
+    
+    override required init?(coder: NSCoder) {
+        fatalError("Not implemented ")
+    }
+    
+    func setupLayout() {
+        // TODO: Implement code of titleView here
+    }
+}
+
+
+// FIXME: - Refactoring
+final class RMNavigationController: UINavigationController {
+    
+}
+
+
