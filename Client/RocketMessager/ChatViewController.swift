@@ -75,13 +75,15 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
     }
 }
 
+// TODO: Extract
+
 enum ChatCollectionViewLayoutAlignment {
     case left, right
 }
 
 protocol ChatCollectionViewLayoutDelegate: AnyObject {
-    var contentSize: CGSize { get }
     var alignment: ChatCollectionViewLayoutAlignment { get }
+    func contentSizeFotItem(_ item: IndexPath) -> CGSize
 }
 
 private extension MessageType {
@@ -127,7 +129,43 @@ final class ChatCollectionViewLayout: UICollectionViewLayout {
     override func prepare() {
         super.prepare()
     
-        // FIXME: - Implement layout
+        self.attributesList = []
+        let _: CGFloat = 10.0
+        
+        guard let collectionView, let delegate else {
+            return
+        }
+        
+        let itemsCount = collectionView.numberOfItems(inSection: 0)
+        
+        var cellsYPositionsDictionary = [Int: CGFloat]()
+        let cellsYPositions = (0...itemsCount).reduce(CGFloat(0.0), { partialResult, itemNum in
+            let indexPath = IndexPath(row: itemNum, section: 0)
+            let currentLayoutHeight = Constants.cellVerticalInset + delegate.contentSizeFotItem(indexPath).height
+            // FIXME: - Need to debug
+            let currentLayout = partialResult + currentLayoutHeight
+            cellsYPositionsDictionary[itemNum] = currentLayout
+            return currentLayout
+        })
+        
+        for i in 0..<itemsCount {
+            let indexPath = IndexPath(row: i, section: 0)
+            let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+            
+            let section = 0
+            attributes.size = delegate.contentSizeFotItem(indexPath)
+                        
+            switch delegate.alignment {
+            case .left:
+                attributes.frame.origin.x = Constants.leftRightInset
+            case .right:
+                attributes.frame.origin.x = collectionView.bounds.width
+                    - Constants.leftRightInset
+                    - delegate.contentSizeFotItem(indexPath).width
+            }
+            attributes.frame.origin.y = cellsYPositionsDictionary[i] ?? 0.0
+            attributesList.append(attributes)
+        }
     }
 }
 
