@@ -75,6 +75,62 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
     }
 }
 
+enum ChatCollectionViewLayoutAlignment {
+    case left, right
+}
+
+protocol ChatCollectionViewLayoutDelegate: AnyObject {
+    var contentSize: CGSize { get }
+    var alignment: ChatCollectionViewLayoutAlignment { get }
+}
+
+private extension MessageType {
+    var chatLayoutType: ChatCollectionViewLayoutAlignment {
+        switch self {
+        case .currentUser:
+            .right
+        case .other:
+            .left
+        }
+    }
+}
+
+final class ChatCollectionViewLayout: UICollectionViewLayout {
+    
+    enum Constants {
+        static let leftRightInset = 16.0
+        static let cellVerticalInset = 8.0
+    }
+    
+    let itemEdgeSize: CGFloat = 50.0
+    let itemSize = CGSize(width: 50.0, height: 50.0)
+    var attributesList = [UICollectionViewLayoutAttributes]()
+    weak var delegate: ChatCollectionViewLayoutDelegate?
+    
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        return attributesList
+    }
+    
+    override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        let attributes = attributesList[indexPath.row]
+        return attributes
+    }
+    
+    override var collectionViewContentSize: CGSize {
+        return self.collectionView?.bounds.size ?? CGSize.zero
+    }
+    
+    override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
+    }
+    
+    override func prepare() {
+        super.prepare()
+    
+        // FIXME: - Implement layout
+    }
+}
+
 final class ChatViewController: UIViewController {
     
     private let messageBuilder: MessageBuilder = TestMessageBuilder()
