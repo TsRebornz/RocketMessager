@@ -17,7 +17,7 @@ struct MessageModel {
     let text: String
     let senderName: String
     let sendDate: Date
-    let type: MessageType = .other
+    let type: MessageType
 }
 
 protocol MessageBuilder {
@@ -28,9 +28,9 @@ protocol MessageBuilder {
 final class TestMessageBuilder: MessageBuilder {
     func build() -> [MessageModel] {
         return [
-            .init(text: "t1", senderName: "s1", sendDate: Date.now),
-            .init(text: "t2", senderName: "s2", sendDate: Date.now),
-            .init(text: "t3", senderName: "s3", sendDate: Date.now)
+            .init(text: "t1", senderName: "s1", sendDate: Date.now, type: .other),
+            .init(text: "t2", senderName: "s2", sendDate: Date.now, type: .currentUser),
+            .init(text: "t3", senderName: "s3", sendDate: Date.now, type: .other)
         ]
     }
 }
@@ -82,7 +82,7 @@ enum ChatCollectionViewLayoutAlignment {
 }
 
 protocol ChatCollectionViewLayoutDelegate: AnyObject {
-    var alignment: ChatCollectionViewLayoutAlignment { get }
+    func alignmentForCell(_ indexPath: IndexPath) -> ChatCollectionViewLayoutAlignment
     func contentSizeFotItem(_ item: IndexPath) -> CGSize
 }
 
@@ -114,6 +114,9 @@ final class ChatCollectionViewLayout: UICollectionViewLayout {
     }
     
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        guard !attributesList.isEmpty else {
+            return nil
+        }
         let attributes = attributesList[indexPath.row]
         return attributes
     }
@@ -139,7 +142,7 @@ final class ChatCollectionViewLayout: UICollectionViewLayout {
         let itemsCount = collectionView.numberOfItems(inSection: 0)
         
         var cellsYPositionsDictionary = [Int: CGFloat]()
-        let cellsYPositions = (0...itemsCount).reduce(CGFloat(0.0), { partialResult, itemNum in
+        _ = (0..<itemsCount).reduce(CGFloat(0.0), { partialResult, itemNum in
             let indexPath = IndexPath(row: itemNum, section: 0)
             let currentLayoutHeight = Constants.cellVerticalInset + delegate.contentSizeFotItem(indexPath).height
             // FIXME: - Need to debug
@@ -149,13 +152,14 @@ final class ChatCollectionViewLayout: UICollectionViewLayout {
         })
         
         for i in 0..<itemsCount {
-            let indexPath = IndexPath(row: i, section: 0)
-            let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-            
+            // TODO: Allow more than one section (Date grouping)
             let section = 0
+            let indexPath = IndexPath(row: i, section: section)
+            let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+                        
             attributes.size = delegate.contentSizeFotItem(indexPath)
                         
-            switch delegate.alignment {
+            switch delegate.alignmentForCell(indexPath) {
             case .left:
                 attributes.frame.origin.x = Constants.leftRightInset
             case .right:
@@ -169,10 +173,27 @@ final class ChatCollectionViewLayout: UICollectionViewLayout {
     }
 }
 
+extension ChatViewController: ChatCollectionViewLayoutDelegate {
+    
+    func alignmentForCell(_ indexPath: IndexPath) -> ChatCollectionViewLayoutAlignment {
+        let message = messages[indexPath.row]
+        return message.type.chatLayoutType
+    }
+    
+    func contentSizeFotItem(_ item: IndexPath) -> CGSize {
+        // TODO: Need precalculate cell size
+        return .init(width: 100, height: 30)        
+    }
+}
+
 final class ChatViewController: UIViewController {
     
     private let messageBuilder: MessageBuilder = TestMessageBuilder()
     private lazy var messages: [MessageModel] = messageBuilder.build()
+    private let collectionView = UICollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout()
+    )
     
     // MARK: - View lifecycle
     
@@ -188,8 +209,9 @@ final class ChatViewController: UIViewController {
     
     private func setupLayout() {
         // FIXME: - Extract UICollectionView building
-        let layout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let layout = ChatCollectionViewLayout()
+        layout.delegate = self
+        collectionView.setCollectionViewLayout(layout, animated: false)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(cell: ChatViewCollectionViewCell.self)
         collectionView.dataSource = self
