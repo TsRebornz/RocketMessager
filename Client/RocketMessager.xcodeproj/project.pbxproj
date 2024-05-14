@@ -16,6 +16,8 @@
 		A1A00FBD2B7E4C8F006041C3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A00FBC2B7E4C8F006041C3 /* AppDelegate.swift */; };
 		A1A00FC62B7E4C90006041C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1A00FC52B7E4C90006041C3 /* Assets.xcassets */; };
 		A1A00FC92B7E4C90006041C3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1A00FC72B7E4C90006041C3 /* LaunchScreen.storyboard */; };
+		A1A598D82BF3807E00E13DA5 /* ChatCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A598D72BF3807E00E13DA5 /* ChatCollectionViewLayout.swift */; };
+		A1A598DA2BF380B400E13DA5 /* ChatViewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A598D92BF380B300E13DA5 /* ChatViewCollectionViewCell.swift */; };
 		A1F5E9E02BCE9D5D0034022F /* UICollectionView + extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F5E9DF2BCE9D5D0034022F /* UICollectionView + extension.swift */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +29,8 @@
 		A1A00FC52B7E4C90006041C3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A1A00FC82B7E4C90006041C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A1A00FCA2B7E4C90006041C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A1A598D72BF3807E00E13DA5 /* ChatCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCollectionViewLayout.swift; sourceTree = "<group>"; };
+		A1A598D92BF380B300E13DA5 /* ChatViewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewCollectionViewCell.swift; sourceTree = "<group>"; };
 		A1F5E9DF2BCE9D5D0034022F /* UICollectionView + extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView + extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -64,15 +68,33 @@
 		A1A00FBB2B7E4C8F006041C3 /* RocketMessager */ = {
 			isa = PBXGroup;
 			children = (
+				A1A598D52BF3805D00E13DA5 /* View */,
 				A1F5E9DE2BCE9D4F0034022F /* Extensions */,
 				A1A00FBC2B7E4C8F006041C3 /* AppDelegate.swift */,
 				A195CF0F2B7E96E300635043 /* RMSocketManager.swift */,
 				A1A00FC52B7E4C90006041C3 /* Assets.xcassets */,
 				A1A00FC72B7E4C90006041C3 /* LaunchScreen.storyboard */,
 				A1A00FCA2B7E4C90006041C3 /* Info.plist */,
-				A1749C432BBEEB1900B7B9D6 /* ChatViewController.swift */,
 			);
 			path = RocketMessager;
+			sourceTree = "<group>";
+		};
+		A1A598D52BF3805D00E13DA5 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A1A598D62BF3805D00E13DA5 /* ChatCollectionView */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		A1A598D62BF3805D00E13DA5 /* ChatCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				A1749C432BBEEB1900B7B9D6 /* ChatViewController.swift */,
+				A1A598D72BF3807E00E13DA5 /* ChatCollectionViewLayout.swift */,
+				A1A598D92BF380B300E13DA5 /* ChatViewCollectionViewCell.swift */,
+			);
+			path = ChatCollectionView;
 			sourceTree = "<group>";
 		};
 		A1F5E9DE2BCE9D4F0034022F /* Extensions */ = {
@@ -164,6 +186,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A195CF102B7E96E300635043 /* RMSocketManager.swift in Sources */,
+				A1A598D82BF3807E00E13DA5 /* ChatCollectionViewLayout.swift in Sources */,
+				A1A598DA2BF380B400E13DA5 /* ChatViewCollectionViewCell.swift in Sources */,
 				A1749C442BBEEB1900B7B9D6 /* ChatViewController.swift in Sources */,
 				A1F5E9E02BCE9D5D0034022F /* UICollectionView + extension.swift in Sources */,
 				A1A00FBD2B7E4C8F006041C3 /* AppDelegate.swift in Sources */,
