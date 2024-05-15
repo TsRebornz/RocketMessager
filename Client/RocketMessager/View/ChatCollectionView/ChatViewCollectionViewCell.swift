@@ -7,20 +7,6 @@
 
 import UIKit
 
-// FIXME: - Extract to proper place
-extension UIFont {
-    func stringOfSize(string: String, maxWidth: CGFloat) -> CGSize {
-        let string = NSString(string: string).boundingRect(
-            with: .init(width: maxWidth, height: .greatestFiniteMagnitude),
-            // TODO: What parameter is better?
-            options: .usesLineFragmentOrigin,
-            attributes: [NSAttributedString.Key.font: self],
-            context: nil
-        )
-        return string.size
-    }
-}
-
 final class ChatViewCollectionViewCell: UICollectionViewCell {
     
     enum Constatnts {
