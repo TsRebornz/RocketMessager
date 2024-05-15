@@ -28,9 +28,23 @@ protocol MessageBuilder {
 final class TestMessageBuilder: MessageBuilder {
     func build() -> [MessageModel] {
         return [
-            .init(text: "t1", senderName: "s1", sendDate: Date.now, type: .other),
-            .init(text: "t2", senderName: "s2", sendDate: Date.now, type: .currentUser),
-            .init(text: "t3", senderName: "s3", sendDate: Date.now, type: .other)
+            .init(
+                text: "t1fdasfjdsaflasdjflajsdf;ljafdsafdsafsdffjdsaladfasfasfjfl;sadafasdfasfjf",
+                senderName: "s1",
+                sendDate: Date.now,
+                type: .other
+            ),
+            .init(
+                text: "testingt2testingtestingtestingtestingtestingtestingtestingtestingtestingtesting",
+                senderName: "s2",
+                sendDate: Date.now,
+                type: .currentUser
+            ),
+            .init(text: "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+                  senderName: "s3",
+                  sendDate: Date.now,
+                  type: .other
+            )
         ]
     }
 }
@@ -44,7 +58,11 @@ extension ChatViewController: ChatCollectionViewLayoutDelegate {
     
     func contentSizeFotItem(_ item: IndexPath) -> CGSize {
         // TODO: Need precalculate cell size
-        return .init(width: 100, height: 30)        
+        guard let cell = collectionView.cellForItem(at: item) else {
+            return .zero
+        }
+        let size = cell.intrinsicContentSize
+        return size
     }
 }
 
@@ -61,6 +79,8 @@ final class ChatViewController: UIViewController {
     
     override func viewDidLoad() {
         setupLayout()
+        collectionView.setNeedsLayout()
+        collectionView.layoutIfNeeded()
     }
     
     // MARK: - Public
