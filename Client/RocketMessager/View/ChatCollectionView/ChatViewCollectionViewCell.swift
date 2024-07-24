@@ -9,22 +9,27 @@ import UIKit
 
 final class ChatViewCollectionViewCell: UICollectionViewCell {
     
+    enum Layout {
+        case leading, trailing
+    }
+    
     enum Constatnts {
         static let font = UIFont.preferredFont(forTextStyle: .caption1)
     }
     
-    let textLabel = UILabel()
-    
-    override var intrinsicContentSize: CGSize {
-        guard let text = textLabel.text else {
-            return super.intrinsicContentSize
+    override var frame: CGRect {
+        didSet {
+            print("ChatViewCollectionViewCell did changed to \(frame)")
         }
-        let maxCellWidth = UIScreen.main.bounds.width / 2
-        let size = textLabel.font.stringOfSize(string: text, maxWidth: maxCellWidth)
-        textLabel.sizeToFit()
-        return textLabel.font.stringOfSize(string: text, maxWidth: maxCellWidth)
     }
     
+    private var layout: Layout = .leading
+    
+    private var leadingConstraint: NSLayoutConstraint?
+    private var trailingConstraint: NSLayoutConstraint?
+    
+    let textLabel = UILabel()
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -41,9 +46,38 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
         textLabel.numberOfLines = 0
         textLabel.font = Constatnts.font
         textLabel.text = model.text
+        switch model.type {
+        case .currentUser:
+            layout = .trailing
+            textLabel.textAlignment = .right
+        case .other:
+            layout = .leading
+            textLabel.textAlignment = .left
+        }
+        
+        setupBorderBindLayout()
+        setNeedsLayout()
+        layoutIfNeeded()
     }
     
     // MARK: - Layout
+    
+    private func setupBorderBindLayout() {
+        switch layout {
+        case .leading:
+            NSLayoutConstraint.deactivate([trailingConstraint]
+                .compactMap{ $0 })
+            NSLayoutConstraint.activate(
+                [leadingConstraint].compactMap{ $0 }
+            )
+        case .trailing:
+            NSLayoutConstraint.deactivate([leadingConstraint]
+                .compactMap{ $0 })
+            NSLayoutConstraint.activate(
+                [trailingConstraint].compactMap{ $0 }
+            )
+        }
+    }
     
     private func setupLayout() {
         
@@ -53,11 +87,25 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
         
         NSLayoutConstraint.activate(
             [
-                textLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                
                 textLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-                textLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-                textLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+                textLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                textLabel.widthAnchor.constraint(
+                    equalTo: contentView.widthAnchor,
+                    // FIXME: - Extract to constants
+                    multiplier: 0.65
+                )
             ]
         )
+        
+        leadingConstraint = textLabel.leadingAnchor.constraint(
+            equalTo: contentView.leadingAnchor
+        )
+        
+        trailingConstraint = textLabel.trailingAnchor.constraint(
+            equalTo: contentView.trailingAnchor
+        )
+
+        setupBorderBindLayout()
     }
 }

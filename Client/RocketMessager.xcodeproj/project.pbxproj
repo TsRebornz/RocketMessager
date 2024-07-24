@@ -19,6 +19,7 @@
 		A1A00FC92B7E4C90006041C3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1A00FC72B7E4C90006041C3 /* LaunchScreen.storyboard */; };
 		A1A598D82BF3807E00E13DA5 /* ChatCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A598D72BF3807E00E13DA5 /* ChatCollectionViewLayout.swift */; };
 		A1A598DA2BF380B400E13DA5 /* ChatViewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A598D92BF380B300E13DA5 /* ChatViewCollectionViewCell.swift */; };
+		A1D522092C510A5A00B28818 /* CollectionViewBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D522082C510A5A00B28818 /* CollectionViewBuilder.swift */; };
 		A1F5E9E02BCE9D5D0034022F /* UICollectionView + extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F5E9DF2BCE9D5D0034022F /* UICollectionView + extension.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 		A1A00FCA2B7E4C90006041C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A1A598D72BF3807E00E13DA5 /* ChatCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCollectionViewLayout.swift; sourceTree = "<group>"; };
 		A1A598D92BF380B300E13DA5 /* ChatViewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewCollectionViewCell.swift; sourceTree = "<group>"; };
+		A1D522082C510A5A00B28818 /* CollectionViewBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewBuilder.swift; sourceTree = "<group>"; };
 		A1F5E9DF2BCE9D5D0034022F /* UICollectionView + extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView + extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -95,6 +97,7 @@
 				A1749C432BBEEB1900B7B9D6 /* ChatViewController.swift */,
 				A1A598D72BF3807E00E13DA5 /* ChatCollectionViewLayout.swift */,
 				A1A598D92BF380B300E13DA5 /* ChatViewCollectionViewCell.swift */,
+				A1D522082C510A5A00B28818 /* CollectionViewBuilder.swift */,
 			);
 			path = ChatCollectionView;
 			sourceTree = "<group>";
@@ -192,6 +195,7 @@
 				A1A598D82BF3807E00E13DA5 /* ChatCollectionViewLayout.swift in Sources */,
 				A1A598DA2BF380B400E13DA5 /* ChatViewCollectionViewCell.swift in Sources */,
 				A1749C442BBEEB1900B7B9D6 /* ChatViewController.swift in Sources */,
+				A1D522092C510A5A00B28818 /* CollectionViewBuilder.swift in Sources */,
 				A1F5E9E02BCE9D5D0034022F /* UICollectionView + extension.swift in Sources */,
 				A12F637C2BF4D4D1005236B6 /* UIFont + extension.swift in Sources */,
 				A1A00FBD2B7E4C8F006041C3 /* AppDelegate.swift in Sources */,

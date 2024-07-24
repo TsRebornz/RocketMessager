@@ -49,27 +49,13 @@ final class TestMessageBuilder: MessageBuilder {
     }
 }
 
-extension ChatViewController: ChatCollectionViewLayoutDelegate {
-    
-    func alignmentForCell(_ indexPath: IndexPath) -> ChatCollectionViewLayoutAlignment {
-        let message = messages[indexPath.row]
-        return message.type.chatLayoutType
-    }
-    
-    func contentSizeFotItem(_ item: IndexPath) -> CGSize {
-        // TODO: Need precalculate cell size
-        guard let cell = collectionView.cellForItem(at: item) else {
-            return .zero
-        }
-        let size = cell.intrinsicContentSize
-        return size
-    }
-}
-
 final class ChatViewController: UIViewController {
     
     private let messageBuilder: MessageBuilder = TestMessageBuilder()
     private lazy var messages: [MessageModel] = messageBuilder.build()
+    
+    private var layout = CollectionViewBuilder.buildCollectionViewLayout()
+    
     private let collectionView = UICollectionView(
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
@@ -82,7 +68,7 @@ final class ChatViewController: UIViewController {
         collectionView.setNeedsLayout()
         collectionView.layoutIfNeeded()
     }
-    
+        
     // MARK: - Public
     
     // MARK: - Private
@@ -90,11 +76,9 @@ final class ChatViewController: UIViewController {
     // MARK: - Private methods
     
     private func setupLayout() {
-        // FIXME: - Extract UICollectionView building
-        let layout = ChatCollectionViewLayout()
-        layout.delegate = self
         collectionView.setCollectionViewLayout(layout, animated: false)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
         collectionView.register(cell: ChatViewCollectionViewCell.self)
         collectionView.dataSource = self
         view.addSubview(collectionView)
