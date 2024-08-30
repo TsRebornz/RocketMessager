@@ -31,7 +31,5 @@ final class ChatCollectionViewLayout: UICollectionViewCompositionalLayout {
     
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         true
-    }    
-    
-    
+    }
 }

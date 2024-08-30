@@ -8,14 +8,31 @@
 import UIKit
 
 final class ChatViewCollectionViewCell: UICollectionViewCell {
-    
-    enum Layout {
-        case leading, trailing
+        
+    enum Config {
+        enum Layout {
+            case leading, trailing
+        }
+        
+        static let cornerRadius = 16.0
+        static let cellTextInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        //static let textInset
+        
+        enum Font {
+            static let font = UIFont.preferredFont(forTextStyle: .caption1)
+            
+            static let userCellTextColor = DesignColors.Chat.userCellTextColor
+            static let otherCellTextColor = DesignColors.Chat.otherCellTextColor
+        }
+        
+        enum Colors {
+            static let cellUserColor = DesignColors.Chat.userCellBackground
+            static let cellOtherColor = DesignColors.Chat.otherCellBackground
+            
+        }
     }
     
-    enum Constatnts {
-        static let font = UIFont.preferredFont(forTextStyle: .caption1)
-    }
+    
     
     override var frame: CGRect {
         didSet {
@@ -23,12 +40,13 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    private var layout: Layout = .leading
+    private var layout: Config.Layout = .leading
     
     private var leadingConstraint: NSLayoutConstraint?
     private var trailingConstraint: NSLayoutConstraint?
     
     let textLabel = UILabel()
+    var backgroundCellView = UIView()
         
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,16 +61,22 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
     // MARK: - Public
     
     func setModel(_ model: MessageModel) {
+        backgroundCellView.layer.masksToBounds = true
+        backgroundCellView.layer.cornerRadius = Config.cornerRadius
         textLabel.numberOfLines = 0
-        textLabel.font = Constatnts.font
+        textLabel.font = Config.Font.font
         textLabel.text = model.text
         switch model.type {
         case .currentUser:
             layout = .trailing
-            textLabel.textAlignment = .right
+            //textLabel.textAlignment = .right
+            textLabel.textColor = Config.Font.userCellTextColor
+            backgroundCellView.backgroundColor = Config.Colors.cellUserColor
         case .other:
             layout = .leading
-            textLabel.textAlignment = .left
+            //textLabel.textAlignment = .left
+            textLabel.textColor = Config.Font.otherCellTextColor
+            backgroundCellView.backgroundColor = Config.Colors.cellOtherColor
         }
         
         setupBorderBindLayout()
@@ -81,28 +105,47 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
     
     private func setupLayout() {
         
+        //F2F7FB
+        
+        
+        backgroundCellView.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        contentView.addSubview(backgroundCellView)
+        
         textLabel.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.backgroundColor = .yellow
-        contentView.addSubview(textLabel)
+        backgroundCellView.addSubview(textLabel)
         
         NSLayoutConstraint.activate(
             [
                 
-                textLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-                textLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-                textLabel.widthAnchor.constraint(
+                backgroundCellView.topAnchor.constraint(equalTo: contentView.topAnchor),
+                backgroundCellView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                backgroundCellView.widthAnchor.constraint(
                     equalTo: contentView.widthAnchor,
                     // FIXME: - Extract to constants
                     multiplier: 0.65
+                ),
+                textLabel.topAnchor.constraint(
+                    equalTo: backgroundCellView.topAnchor, constant: Config.cellTextInset.top
+                ),
+                textLabel.bottomAnchor.constraint(
+                    equalTo: backgroundCellView.bottomAnchor, constant: -Config.cellTextInset.bottom
+                ),
+                textLabel.leftAnchor.constraint(
+                    equalTo: backgroundCellView.leftAnchor, constant: Config.cellTextInset.left
+                ),
+                textLabel.rightAnchor.constraint(
+                    equalTo: backgroundCellView.rightAnchor, constant: -Config.cellTextInset.right
                 )
             ]
         )
         
-        leadingConstraint = textLabel.leadingAnchor.constraint(
+        leadingConstraint = backgroundCellView.leadingAnchor.constraint(
             equalTo: contentView.leadingAnchor
         )
         
-        trailingConstraint = textLabel.trailingAnchor.constraint(
+        trailingConstraint = backgroundCellView.trailingAnchor.constraint(
             equalTo: contentView.trailingAnchor
         )
 
