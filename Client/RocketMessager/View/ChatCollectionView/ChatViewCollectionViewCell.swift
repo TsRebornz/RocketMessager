@@ -15,7 +15,8 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
         }
         
         static let cornerRadius = 16.0
-        static let cellTextInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        static let messageLabelInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        static let messageViewBottomInset = 8.0
         //static let textInset
         
         enum Font {
@@ -45,13 +46,17 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
     private var leadingConstraint: NSLayoutConstraint?
     private var trailingConstraint: NSLayoutConstraint?
     
-    let textLabel = UILabel()
+    let messageLabel = UILabel()
+    var backgroundMessageView = UIView()
+    let timesendLabel = UILabel()
+    //var backgroundTimesendView = UIView()
     var backgroundCellView = UIView()
         
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         setupLayout()
+        configure()
     }
     
     required init?(coder: NSCoder) {
@@ -61,27 +66,34 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
     // MARK: - Public
     
     func setModel(_ model: MessageModel) {
-        backgroundCellView.layer.masksToBounds = true
-        backgroundCellView.layer.cornerRadius = Config.cornerRadius
-        textLabel.numberOfLines = 0
-        textLabel.font = Config.Font.font
-        textLabel.text = model.text
+        messageLabel.font = Config.Font.font
+        messageLabel.text = model.text
+        timesendLabel.text = "09:25"
         switch model.type {
         case .currentUser:
             layout = .trailing
             //textLabel.textAlignment = .right
-            textLabel.textColor = Config.Font.userCellTextColor
-            backgroundCellView.backgroundColor = Config.Colors.cellUserColor
+            messageLabel.textColor = Config.Font.userCellTextColor
+            backgroundMessageView.backgroundColor = Config.Colors.cellUserColor
         case .other:
             layout = .leading
             //textLabel.textAlignment = .left
-            textLabel.textColor = Config.Font.otherCellTextColor
-            backgroundCellView.backgroundColor = Config.Colors.cellOtherColor
+            messageLabel.textColor = Config.Font.otherCellTextColor
+            backgroundMessageView.backgroundColor = Config.Colors.cellOtherColor
         }
         
         setupBorderBindLayout()
         setNeedsLayout()
         layoutIfNeeded()
+    }
+    
+    // MARK: - Config
+    
+    private func configure() {
+        backgroundMessageView.layer.masksToBounds = true
+        backgroundMessageView.layer.cornerRadius = Config.cornerRadius
+        messageLabel.numberOfLines = 0
+        timesendLabel.textAlignment = .right
     }
     
     // MARK: - Layout
@@ -107,14 +119,17 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
         
         //F2F7FB
         
-        
         backgroundCellView.translatesAutoresizingMaskIntoConstraints = false
-        
+        backgroundMessageView.translatesAutoresizingMaskIntoConstraints = false
+        timesendLabel.translatesAutoresizingMaskIntoConstraints = false
+        //backgroundTimesendView.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(backgroundCellView)
+        backgroundCellView.addSubview(backgroundMessageView)
+        backgroundCellView.addSubview(timesendLabel)
         
-        textLabel.translatesAutoresizingMaskIntoConstraints = false
-        backgroundCellView.addSubview(textLabel)
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        backgroundMessageView.addSubview(messageLabel)
         
         NSLayoutConstraint.activate(
             [
@@ -126,26 +141,49 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
                     // FIXME: - Extract to constants
                     multiplier: 0.65
                 ),
-                textLabel.topAnchor.constraint(
-                    equalTo: backgroundCellView.topAnchor, constant: Config.cellTextInset.top
+                backgroundMessageView.topAnchor.constraint(
+                    equalTo: backgroundCellView.topAnchor, constant: Config.messageLabelInset.top
                 ),
-                textLabel.bottomAnchor.constraint(
-                    equalTo: backgroundCellView.bottomAnchor, constant: -Config.cellTextInset.bottom
+                backgroundMessageView.bottomAnchor.constraint(
+                    equalTo: timesendLabel.topAnchor, constant: -Config.messageViewBottomInset
                 ),
-                textLabel.leftAnchor.constraint(
-                    equalTo: backgroundCellView.leftAnchor, constant: Config.cellTextInset.left
+                backgroundMessageView.leftAnchor.constraint(
+                    equalTo: backgroundCellView.leftAnchor, constant: Config.messageLabelInset.left
                 ),
-                textLabel.rightAnchor.constraint(
-                    equalTo: backgroundCellView.rightAnchor, constant: -Config.cellTextInset.right
+                backgroundMessageView.rightAnchor.constraint(
+                    equalTo: backgroundCellView.rightAnchor, constant: Config.messageLabelInset.left
+                ),
+                ///
+                messageLabel.topAnchor.constraint(
+                    equalTo: backgroundMessageView.topAnchor, constant: Config.messageLabelInset.top
+                ),
+                messageLabel.bottomAnchor.constraint(
+                    equalTo: backgroundMessageView.bottomAnchor, constant: -Config.messageLabelInset.bottom
+                ),
+                messageLabel.leftAnchor.constraint(
+                    equalTo: backgroundMessageView.leftAnchor, constant: Config.messageLabelInset.left
+                ),
+                messageLabel.rightAnchor.constraint(
+                    equalTo: backgroundMessageView.rightAnchor, constant: -Config.messageLabelInset.right
+                ),
+                ///
+                timesendLabel.leftAnchor.constraint(
+                    equalTo: backgroundCellView.leftAnchor, constant: Config.messageLabelInset.left
+                ),
+                timesendLabel.rightAnchor.constraint(
+                    equalTo: backgroundCellView.rightAnchor, constant: Config.messageLabelInset.left
+                ),
+                timesendLabel.bottomAnchor.constraint(
+                    equalTo: backgroundCellView.bottomAnchor, constant: Config.messageViewBottomInset
                 )
             ]
         )
         
-        leadingConstraint = backgroundCellView.leadingAnchor.constraint(
+        leadingConstraint = backgroundMessageView.leadingAnchor.constraint(
             equalTo: contentView.leadingAnchor
         )
         
-        trailingConstraint = backgroundCellView.trailingAnchor.constraint(
+        trailingConstraint = backgroundMessageView.trailingAnchor.constraint(
             equalTo: contentView.trailingAnchor
         )
 
