@@ -17,19 +17,18 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
         static let cornerRadius = 16.0
         static let messageLabelInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
         static let messageViewBottomInset = 8.0
-        //static let textInset
         
         enum Font {
-            static let font = UIFont.preferredFont(forTextStyle: .caption1)
-            
-            static let userCellTextColor = DesignColors.Chat.userCellTextColor
-            static let otherCellTextColor = DesignColors.Chat.otherCellTextColor
+            static let messageFont = UIFont.preferredFont(forTextStyle: .caption1)
+            static let timestampFont = UIFont.preferredFont(forTextStyle: .caption2)
         }
         
         enum Colors {
             static let cellUserColor = DesignColors.Chat.userCellBackground
             static let cellOtherColor = DesignColors.Chat.otherCellBackground
-            
+            static let userCellTextColor = DesignColors.Chat.userCellTextColor
+            static let otherCellTextColor = DesignColors.Chat.otherCellTextColor
+            static let timeLabelCellTextColor = DesignColors.Chat.timeLabelCellTextColor
         }
     }
     
@@ -49,7 +48,6 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
     let messageLabel = UILabel()
     var backgroundMessageView = UIView()
     let timesendLabel = UILabel()
-    //var backgroundTimesendView = UIView()
     var backgroundCellView = UIView()
         
     override init(frame: CGRect) {
@@ -66,19 +64,16 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
     // MARK: - Public
     
     func setModel(_ model: MessageModel) {
-        messageLabel.font = Config.Font.font
         messageLabel.text = model.text
         timesendLabel.text = "09:25"
         switch model.type {
         case .currentUser:
             layout = .trailing
-            //textLabel.textAlignment = .right
-            messageLabel.textColor = Config.Font.userCellTextColor
+            messageLabel.textColor = Config.Colors.userCellTextColor
             backgroundMessageView.backgroundColor = Config.Colors.cellUserColor
         case .other:
             layout = .leading
-            //textLabel.textAlignment = .left
-            messageLabel.textColor = Config.Font.otherCellTextColor
+            messageLabel.textColor = Config.Colors.otherCellTextColor
             backgroundMessageView.backgroundColor = Config.Colors.cellOtherColor
         }
         
@@ -93,7 +88,10 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
         backgroundMessageView.layer.masksToBounds = true
         backgroundMessageView.layer.cornerRadius = Config.cornerRadius
         messageLabel.numberOfLines = 0
+        messageLabel.font = Config.Font.messageFont
+        timesendLabel.font = Config.Font.timestampFont
         timesendLabel.textAlignment = .right
+        timesendLabel.textColor = Config.Colors.timeLabelCellTextColor
     }
     
     // MARK: - Layout
@@ -117,12 +115,9 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
     
     private func setupLayout() {
         
-        //F2F7FB
-        
         backgroundCellView.translatesAutoresizingMaskIntoConstraints = false
         backgroundMessageView.translatesAutoresizingMaskIntoConstraints = false
         timesendLabel.translatesAutoresizingMaskIntoConstraints = false
-        //backgroundTimesendView.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(backgroundCellView)
         backgroundCellView.addSubview(backgroundMessageView)
@@ -171,7 +166,7 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
                     equalTo: backgroundCellView.leftAnchor, constant: Config.messageLabelInset.left
                 ),
                 timesendLabel.rightAnchor.constraint(
-                    equalTo: backgroundCellView.rightAnchor, constant: Config.messageLabelInset.left
+                    equalTo: backgroundCellView.rightAnchor, constant: Config.messageLabelInset.right - Config.cornerRadius
                 ),
                 timesendLabel.bottomAnchor.constraint(
                     equalTo: backgroundCellView.bottomAnchor, constant: Config.messageViewBottomInset
