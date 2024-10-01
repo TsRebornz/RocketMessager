@@ -1,0 +1,14 @@
+# input_dir: RocketMessager/
+output_dir: RocketMessager/Resources/Generated
+# strings:
+#   inputs: Base.lproj
+#   outputs:
+#     - templateName: structured-swift5
+#       output: L10n-Constants.generated.swift
+xcassets:
+  inputs:
+    - RocketMessager/Resources/Images.xcassets
+    - RocketMessager/Resources/Colors.xcassets
+  outputs:
+    - templateName: swift5
+      output: Assets.swift

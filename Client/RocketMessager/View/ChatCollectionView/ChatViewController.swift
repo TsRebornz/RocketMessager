@@ -18,6 +18,7 @@ struct MessageModel {
     let senderName: String
     let sendDate: Date
     let type: MessageType
+    let isLastMessage: Bool
 }
 
 protocol MessageBuilder {
@@ -32,24 +33,33 @@ final class TestMessageBuilder: MessageBuilder {
                 text: "t1fdasfjdsaflasdjflajsdf;ljafdsafdsafsdffjdsaladfasfasfjfl;sadafasdfasfjf",
                 senderName: "s1",
                 sendDate: Date.now,
-                type: .other
+                type: .other,
+                isLastMessage: true
             ),
             .init(
                 text: "testingt2testingtestingtestingtestingtestingtestingtestingtestingtestingtesting",
                 senderName: "s2",
                 sendDate: Date.now,
-                type: .currentUser
+                type: .currentUser,
+                isLastMessage: false
             ),
             .init(text: "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
                   senderName: "s3",
                   sendDate: Date.now,
-                  type: .other
+                  type: .other,
+                  isLastMessage: false
             )
         ]
     }
 }
 
 final class ChatViewController: UIViewController {
+    
+    enum Config {
+        enum Layout {
+            static let horizontalInset = 24.0
+        }
+    }
     
     private let messageBuilder: MessageBuilder = TestMessageBuilder()
     private lazy var messages: [MessageModel] = messageBuilder.build()
@@ -65,6 +75,7 @@ final class ChatViewController: UIViewController {
     
     override func viewDidLoad() {
         setupLayout()
+        view.backgroundColor = .white
         collectionView.setNeedsLayout()
         collectionView.layoutIfNeeded()
     }
@@ -85,9 +96,9 @@ final class ChatViewController: UIViewController {
                         
         NSLayoutConstraint.activate(
             [
-                collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Config.Layout.horizontalInset),
                 collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-                collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Config.Layout.horizontalInset),
                 collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             ]
         )

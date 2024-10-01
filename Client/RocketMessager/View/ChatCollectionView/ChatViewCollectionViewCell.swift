@@ -32,8 +32,6 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    
-    
     override var frame: CGRect {
         didSet {
             print("ChatViewCollectionViewCell did changed to \(frame)")
@@ -45,10 +43,15 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
     private var leadingConstraint: NSLayoutConstraint?
     private var trailingConstraint: NSLayoutConstraint?
     
-    let messageLabel = UILabel()
-    var backgroundMessageView = UIView()
-    let timesendLabel = UILabel()
-    var backgroundCellView = UIView()
+    private lazy var chatStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = Config.messageViewBottomInset
+        return stackView
+    }()
+    private let messageLabel = UILabel()
+    private var backgroundMessageView = UIView()
+    private let timesendLabel = UILabel()
         
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -76,6 +79,8 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
             messageLabel.textColor = Config.Colors.otherCellTextColor
             backgroundMessageView.backgroundColor = Config.Colors.cellOtherColor
         }
+        
+        timesendLabel.isHidden = model.isLastMessage ? false : true
         
         setupBorderBindLayout()
         setNeedsLayout()
@@ -115,13 +120,14 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
     
     private func setupLayout() {
         
-        backgroundCellView.translatesAutoresizingMaskIntoConstraints = false
+        chatStackView.translatesAutoresizingMaskIntoConstraints = false
         backgroundMessageView.translatesAutoresizingMaskIntoConstraints = false
         timesendLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        contentView.addSubview(backgroundCellView)
-        backgroundCellView.addSubview(backgroundMessageView)
-        backgroundCellView.addSubview(timesendLabel)
+        contentView.addSubview(chatStackView)
+                
+        chatStackView.addArrangedSubview(backgroundMessageView)
+        chatStackView.addArrangedSubview(timesendLabel)
         
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
         backgroundMessageView.addSubview(messageLabel)
@@ -129,26 +135,13 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate(
             [
                 
-                backgroundCellView.topAnchor.constraint(equalTo: contentView.topAnchor),
-                backgroundCellView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-                backgroundCellView.widthAnchor.constraint(
+                chatStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
+                chatStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+                chatStackView.widthAnchor.constraint(
                     equalTo: contentView.widthAnchor,
                     // FIXME: - Extract to constants
                     multiplier: 0.65
                 ),
-                backgroundMessageView.topAnchor.constraint(
-                    equalTo: backgroundCellView.topAnchor, constant: Config.messageLabelInset.top
-                ),
-                backgroundMessageView.bottomAnchor.constraint(
-                    equalTo: timesendLabel.topAnchor, constant: -Config.messageViewBottomInset
-                ),
-                backgroundMessageView.leftAnchor.constraint(
-                    equalTo: backgroundCellView.leftAnchor, constant: Config.messageLabelInset.left
-                ),
-                backgroundMessageView.rightAnchor.constraint(
-                    equalTo: backgroundCellView.rightAnchor, constant: Config.messageLabelInset.left
-                ),
-                ///
                 messageLabel.topAnchor.constraint(
                     equalTo: backgroundMessageView.topAnchor, constant: Config.messageLabelInset.top
                 ),
@@ -160,16 +153,6 @@ final class ChatViewCollectionViewCell: UICollectionViewCell {
                 ),
                 messageLabel.rightAnchor.constraint(
                     equalTo: backgroundMessageView.rightAnchor, constant: -Config.messageLabelInset.right
-                ),
-                ///
-                timesendLabel.leftAnchor.constraint(
-                    equalTo: backgroundCellView.leftAnchor, constant: Config.messageLabelInset.left
-                ),
-                timesendLabel.rightAnchor.constraint(
-                    equalTo: backgroundCellView.rightAnchor, constant: Config.messageLabelInset.right - Config.cornerRadius
-                ),
-                timesendLabel.bottomAnchor.constraint(
-                    equalTo: backgroundCellView.bottomAnchor, constant: Config.messageViewBottomInset
                 )
             ]
         )
