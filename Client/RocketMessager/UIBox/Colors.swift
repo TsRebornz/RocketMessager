@@ -15,4 +15,13 @@ enum DesignColors {
         static let otherCellTextColor = UIColor(hexString: "000E08")
         static let timeLabelCellTextColor = UIColor(hexString: "797C7B") 
     }
+    
+    enum ChatTitle {
+        static let tileTextColor = UIColor(hexString: "000000")
+        static let subtitleTextColor = UIColor(hexString: "797C7B")
+    }
+}
+
+extension UIColor {
+    
 }
