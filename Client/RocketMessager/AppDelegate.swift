@@ -22,8 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var viewController = ChatViewController()
         navigationController.setViewControllers([viewController], animated: false)
         // FIXME: - Ref. Builder or dependency injection
-        viewController = NavigationContollerConfigurator.configureChat(viewController: viewController) as! ChatViewController
-        viewController.navigationItem.titleView = RMNavigationControllerTitleView()
+        let model = ChatNavigationControllerModel(
+            title: "John Abraham",
+            subtitle: "Active now",
+            avatar: #imageLiteral(resourceName: "AvatarTest")
+        )
+        viewController = ChatNavigationContollerConfigurator.configureChat(viewController: viewController, model: model) as! ChatViewController
         
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
@@ -32,12 +36,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-class NavigationContollerConfigurator {
+struct ChatNavigationControllerModel {
+    let title: String
+    let subtitle: String
+    let avatar: UIImage
+}
+
+class ChatNavigationContollerConfigurator {
     // FIXME: - Remove static
-    static func configureChat(viewController: UIViewController) -> UIViewController {
-        viewController.navigationItem.titleView = RMNavigationControllerTitleView()
-        var imageView = UIImageView(image: #imageLiteral(resourceName: "AvatarTest"))
-        var avatarBarItem = UIBarButtonItem(customView: imageView)
+    static func configureChat(
+        viewController: UIViewController,
+        model: ChatNavigationControllerModel
+    ) -> UIViewController {
+        var titleView = RMNavigationControllerTitleView(model: model)
+        viewController.navigationItem.titleView = titleView
+        let imageView = UIImageView(image: model.avatar)
+        let avatarBarItem = UIBarButtonItem(customView: imageView)
         
         viewController.navigationItem.rightBarButtonItems = [avatarBarItem]
 
@@ -62,7 +76,7 @@ final class RMNavigationControllerTitleView: UIView {
         return label
     }()
     
-    private var subtitleLabel = {
+    private var subtitleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 11.0)
         label.textAlignment = .center
@@ -74,16 +88,22 @@ final class RMNavigationControllerTitleView: UIView {
         super.init(frame: frame)
         
         setupLayout()
-        configureData()
     }
     
+    convenience init(model: ChatNavigationControllerModel) {
+        self.init(frame: .zero)
+        configureData(model: model)
+    }
+        
     override required init?(coder: NSCoder) {
-        fatalError("Not implemented ")
+        fatalError("Not implemented")
     }
     
-    func configureData() {
-        titleLabel.text = "John Abraham"
-        subtitleLabel.text = "Active now"
+    func configureData(model: ChatNavigationControllerModel) {
+        titleLabel.text = model.title
+        subtitleLabel.text = model.subtitle
+        setNeedsLayout()
+        layoutIfNeeded()
     }
     
     func setupLayout() {

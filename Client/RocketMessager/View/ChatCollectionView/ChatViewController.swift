@@ -78,6 +78,8 @@ final class ChatViewController: UIViewController {
         view.backgroundColor = .white
         collectionView.setNeedsLayout()
         collectionView.layoutIfNeeded()
+        
+        navigationController?.title = "chat"
     }
         
     // MARK: - Public
