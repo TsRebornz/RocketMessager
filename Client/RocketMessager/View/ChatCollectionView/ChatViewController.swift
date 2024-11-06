@@ -79,7 +79,6 @@ final class ChatViewController: UIViewController {
         collectionView.setNeedsLayout()
         collectionView.layoutIfNeeded()
         
-        navigationController?.title = "chat"
     }
         
     // MARK: - Public
@@ -102,6 +101,22 @@ final class ChatViewController: UIViewController {
                 collectionView.topAnchor.constraint(equalTo: view.topAnchor),
                 collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Config.Layout.horizontalInset),
                 collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            ]
+        )
+        
+        let inputTextField = UITextField()
+        inputTextField.borderStyle = .roundedRect
+        inputTextField.placeholder = "Type a message..."
+        inputTextField.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(inputTextField)
+        
+        NSLayoutConstraint.activate(
+            [
+                inputTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Config.Layout.horizontalInset),
+                inputTextField.heightAnchor.constraint(equalToConstant: 40),
+                inputTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Config.Layout.horizontalInset),
+                inputTextField.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor)
             ]
         )
     }
