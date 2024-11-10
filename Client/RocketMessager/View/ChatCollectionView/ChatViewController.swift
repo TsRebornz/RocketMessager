@@ -104,19 +104,31 @@ final class ChatViewController: UIViewController {
             ]
         )
         
+        let viewBackground = UIView()
+        view.addSubview(viewBackground)
+        viewBackground.translatesAutoresizingMaskIntoConstraints = false
+        
         let inputTextField = UITextField()
         inputTextField.borderStyle = .roundedRect
         inputTextField.placeholder = "Type a message..."
         inputTextField.translatesAutoresizingMaskIntoConstraints = false
         
-        view.addSubview(inputTextField)
+        let stackView = UIStackView(arrangedSubviews: [inputTextField])
+        stackView.spacing = 4.0
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        viewBackground.addSubview(stackView)
         
         NSLayoutConstraint.activate(
             [
-                inputTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Config.Layout.horizontalInset),
+                viewBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Config.Layout.horizontalInset),
+                viewBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Config.Layout.horizontalInset),
+                viewBackground.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+                stackView.leadingAnchor.constraint(equalTo: viewBackground.leadingAnchor),
+                stackView.topAnchor.constraint(equalTo: viewBackground.topAnchor),
+                stackView.trailingAnchor.constraint(equalTo: viewBackground.trailingAnchor),
+                stackView.bottomAnchor.constraint(equalTo: viewBackground.bottomAnchor),
                 inputTextField.heightAnchor.constraint(equalToConstant: 40),
-                inputTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Config.Layout.horizontalInset),
-                inputTextField.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor)
             ]
         )
     }
