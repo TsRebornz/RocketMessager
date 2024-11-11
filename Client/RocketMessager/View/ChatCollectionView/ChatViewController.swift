@@ -75,7 +75,8 @@ final class ChatViewController: UIViewController {
     
     override func viewDidLoad() {
         setupLayout()
-        view.backgroundColor = .white
+        // FIXME: Extract to design system colors
+        view.backgroundColor = .systemBackground
         collectionView.setNeedsLayout()
         collectionView.layoutIfNeeded()
         
