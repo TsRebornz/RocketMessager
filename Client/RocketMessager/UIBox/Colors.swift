@@ -20,6 +20,10 @@ enum DesignColors {
         static let tileTextColor = UIColor(hexString: "000000")
         static let subtitleTextColor = UIColor(hexString: "797C7B")
     }
+    
+    enum ChatInput {
+        static let inputTextFieldBackgroundColor = UIColor(hexString: "F3F6F6")
+    }
 }
 
 extension UIColor {

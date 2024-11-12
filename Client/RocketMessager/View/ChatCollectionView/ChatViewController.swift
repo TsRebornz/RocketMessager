@@ -25,6 +25,17 @@ protocol MessageBuilder {
     func build() -> [MessageModel]
 }
 
+// FIXME: Extract to file
+class RMTextField: UITextField {
+    override func textRect(forBounds bounds: CGRect) -> CGRect {
+        return CGRectInset(bounds, 10, 10)
+    }
+    
+    override func editingRect(forBounds bounds: CGRect) -> CGRect {
+        return CGRectInset(bounds, 10, 10)
+    }
+}
+
 // MARK: - Test
 final class TestMessageBuilder: MessageBuilder {
     func build() -> [MessageModel] {
@@ -58,6 +69,10 @@ final class ChatViewController: UIViewController {
     enum Config {
         enum Layout {
             static let horizontalInset = 24.0
+        }
+        
+        enum Colors {
+            static let inputTextFieldBackgroundColor: UIColor = DesignColors.ChatInput.inputTextFieldBackgroundColor
         }
     }
     
@@ -109,10 +124,15 @@ final class ChatViewController: UIViewController {
         view.addSubview(viewBackground)
         viewBackground.translatesAutoresizingMaskIntoConstraints = false
         
-        let inputTextField = UITextField()
-        inputTextField.borderStyle = .roundedRect
+        
+        // FIXME: Need refactoring
+        let inputTextField = RMTextField()
+        inputTextField.borderStyle = .none
         inputTextField.placeholder = "Type a message..."
         inputTextField.translatesAutoresizingMaskIntoConstraints = false
+        inputTextField.backgroundColor = Config.Colors.inputTextFieldBackgroundColor
+        inputTextField.layer.masksToBounds = true
+        inputTextField.layer.cornerRadius = 13.0
         
         let stackView = UIStackView(arrangedSubviews: [inputTextField])
         stackView.spacing = 4.0
@@ -124,7 +144,7 @@ final class ChatViewController: UIViewController {
             [
                 viewBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Config.Layout.horizontalInset),
                 viewBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Config.Layout.horizontalInset),
-                viewBackground.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+                viewBackground.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor),
                 stackView.leadingAnchor.constraint(equalTo: viewBackground.leadingAnchor),
                 stackView.topAnchor.constraint(equalTo: viewBackground.topAnchor),
                 stackView.trailingAnchor.constraint(equalTo: viewBackground.trailingAnchor),
