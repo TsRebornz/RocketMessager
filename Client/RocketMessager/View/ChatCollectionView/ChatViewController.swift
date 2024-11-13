@@ -134,8 +134,12 @@ final class ChatViewController: UIViewController {
         inputTextField.layer.masksToBounds = true
         inputTextField.layer.cornerRadius = 13.0
         
-        let stackView = UIStackView(arrangedSubviews: [inputTextField])
-        stackView.spacing = 4.0
+        // FIXME: Refactoring
+        let sendButton = UIButton(type: .system)
+        sendButton.setImage(.chatSendButton, for: .normal)
+        
+        let stackView = UIStackView(arrangedSubviews: [inputTextField, sendButton])
+        stackView.spacing = 16.0
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         viewBackground.addSubview(stackView)
