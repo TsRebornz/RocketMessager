@@ -74,12 +74,33 @@ final class ChatViewController: UIViewController {
         enum Colors {
             static let inputTextFieldBackgroundColor: UIColor = DesignColors.ChatInput.inputTextFieldBackgroundColor
         }
+        
+        enum Constants {
+            static let inputTextFieldHorizontalSpacing: CGFloat = 16.0
+        }
     }
     
     private let messageBuilder: MessageBuilder = TestMessageBuilder()
     private lazy var messages: [MessageModel] = messageBuilder.build()
     
     private var layout = CollectionViewBuilder.buildCollectionViewLayout()
+    
+    private var inputTextField: RMTextField = {
+        let textField = RMTextField()
+        textField.borderStyle = .none
+        textField.placeholder = "Type a message..."
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.backgroundColor = Config.Colors.inputTextFieldBackgroundColor
+        textField.layer.masksToBounds = true
+        textField.layer.cornerRadius = 13.0
+        return textField
+    }()
+    
+    private var inputButton: UIButton = {
+        let button = UIButton()
+        button.setImage(.chatSendButton, for: .normal)
+        return button
+    }()
     
     private let collectionView = UICollectionView(
         frame: .zero,
@@ -123,23 +144,10 @@ final class ChatViewController: UIViewController {
         let viewBackground = UIView()
         view.addSubview(viewBackground)
         viewBackground.translatesAutoresizingMaskIntoConstraints = false
+        setupInputButton()
         
-        
-        // FIXME: Need refactoring
-        let inputTextField = RMTextField()
-        inputTextField.borderStyle = .none
-        inputTextField.placeholder = "Type a message..."
-        inputTextField.translatesAutoresizingMaskIntoConstraints = false
-        inputTextField.backgroundColor = Config.Colors.inputTextFieldBackgroundColor
-        inputTextField.layer.masksToBounds = true
-        inputTextField.layer.cornerRadius = 13.0
-        
-        // FIXME: Refactoring
-        let sendButton = UIButton(type: .system)
-        sendButton.setImage(.chatSendButton, for: .normal)
-        
-        let stackView = UIStackView(arrangedSubviews: [inputTextField, sendButton])
-        stackView.spacing = 16.0
+        let stackView = UIStackView(arrangedSubviews: [inputTextField, inputButton])
+        stackView.spacing = Config.Constants.inputTextFieldHorizontalSpacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         viewBackground.addSubview(stackView)
@@ -156,6 +164,14 @@ final class ChatViewController: UIViewController {
                 inputTextField.heightAnchor.constraint(equalToConstant: 40),
             ]
         )
+    }
+    
+    private func setupInputButton() {
+        inputButton.addTarget(self, action: #selector(didTapInputButton), for: .touchUpInside)
+    }
+    
+    @objc private func didTapInputButton() {
+        
     }
 }
 
