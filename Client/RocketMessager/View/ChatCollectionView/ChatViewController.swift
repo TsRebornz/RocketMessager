@@ -85,7 +85,7 @@ final class ChatViewController: UIViewController {
     
     private var layout = CollectionViewBuilder.buildCollectionViewLayout()
     
-    private var inputTextField: RMTextField = {
+    private lazy var inputTextField: RMTextField = {
         let textField = RMTextField()
         textField.borderStyle = .none
         textField.placeholder = "Type a message..."
@@ -93,12 +93,14 @@ final class ChatViewController: UIViewController {
         textField.backgroundColor = Config.Colors.inputTextFieldBackgroundColor
         textField.layer.masksToBounds = true
         textField.layer.cornerRadius = 13.0
+        textField.delegate = self
         return textField
     }()
     
     private var inputButton: UIButton = {
         let button = UIButton()
         button.setImage(.chatSendButton, for: .normal)
+        button.isHidden = true
         return button
     }()
     
@@ -171,7 +173,37 @@ final class ChatViewController: UIViewController {
     }
     
     @objc private func didTapInputButton() {
-        
+        guard let text = inputTextField.text else {
+            fatalError("Input text field is empty")
+        }
+        let model = MessageModel(
+            text: text,
+            senderName: "Billy",
+            sendDate: Date(),
+            type: .currentUser,
+            isLastMessage: true
+        )
+        messages.append(model)
+        // FIXME: Call network layer to send message
+        collectionView.performBatchUpdates { [weak self] in
+            let indexPath = IndexPath(row: self?.messages.count ?? 0, section: 0)
+            self?.collectionView.reloadSections(IndexSet(integer: 0))
+        }
+    }
+    
+    private func animateInputChatButton(_ isShowing: Bool) {
+        //FIXME: add animation
+        inputButton.isHidden = !isShowing
+    }
+}
+
+extension ChatViewController: UITextFieldDelegate {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        if textField.text?.isEmpty == true {
+            animateInputChatButton(false)
+        } else {
+            animateInputChatButton(true)
+        }
     }
 }
 
