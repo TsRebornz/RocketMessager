@@ -138,6 +138,7 @@ final class ChatViewController: UIViewController {
             isLastMessage: true
         )
         viewModel.sendMessage(model)
+        inputTextField.text = nil
         collectionView.performBatchUpdates { [weak self] in
             let indexPath = IndexPath(row: self?.viewModel.messages.count ?? 0, section: 0)
             self?.collectionView.reloadSections(IndexSet(integer: 0))
