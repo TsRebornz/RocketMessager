@@ -7,24 +7,6 @@
 
 import UIKit
 
-// MARK: - Extract to model
-enum MessageType {
-    case currentUser
-    case other
-}
-
-struct MessageModel {
-    let text: String
-    let senderName: String
-    let sendDate: Date
-    let type: MessageType
-    let isLastMessage: Bool
-}
-
-protocol MessageBuilder {
-    func build() -> [MessageModel]
-}
-
 // FIXME: Extract to file
 class RMTextField: UITextField {
     override func textRect(forBounds bounds: CGRect) -> CGRect {
@@ -36,33 +18,6 @@ class RMTextField: UITextField {
     }
 }
 
-// MARK: - Test
-final class TestMessageBuilder: MessageBuilder {
-    func build() -> [MessageModel] {
-        return [
-            .init(
-                text: "t1fdasfjdsaflasdjflajsdf;ljafdsafdsafsdffjdsaladfasfasfjfl;sadafasdfasfjf",
-                senderName: "s1",
-                sendDate: Date.now,
-                type: .other,
-                isLastMessage: true
-            ),
-            .init(
-                text: "testingt2testingtestingtestingtestingtestingtestingtestingtestingtestingtesting",
-                senderName: "s2",
-                sendDate: Date.now,
-                type: .currentUser,
-                isLastMessage: false
-            ),
-            .init(text: "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-                  senderName: "s3",
-                  sendDate: Date.now,
-                  type: .other,
-                  isLastMessage: false
-            )
-        ]
-    }
-}
 
 final class ChatViewController: UIViewController {
     
@@ -80,8 +35,7 @@ final class ChatViewController: UIViewController {
         }
     }
     
-    private let messageBuilder: MessageBuilder = TestMessageBuilder()
-    private lazy var messages: [MessageModel] = messageBuilder.build()
+    private let viewModel: ChatViewModelProtocol = ChatViewModel()
     
     private var layout = CollectionViewBuilder.buildCollectionViewLayout()
     
@@ -183,10 +137,9 @@ final class ChatViewController: UIViewController {
             type: .currentUser,
             isLastMessage: true
         )
-        messages.append(model)
-        // FIXME: Call network layer to send message
+        viewModel.sendMessage(model)
         collectionView.performBatchUpdates { [weak self] in
-            let indexPath = IndexPath(row: self?.messages.count ?? 0, section: 0)
+            let indexPath = IndexPath(row: self?.viewModel.messages.count ?? 0, section: 0)
             self?.collectionView.reloadSections(IndexSet(integer: 0))
         }
     }
@@ -209,7 +162,7 @@ extension ChatViewController: UITextFieldDelegate {
 
 extension ChatViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return messages.count
+        return viewModel.messages.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -220,7 +173,7 @@ extension ChatViewController: UICollectionViewDataSource {
         guard let cell: ChatViewCollectionViewCell = collectionView.dequeue(for: indexPath) else {
             return UICollectionViewCell()
         }
-        let model = messages[indexPath.row]
+        let model = viewModel.messages[indexPath.row]
         cell.setModel(model)
         return cell
     }
