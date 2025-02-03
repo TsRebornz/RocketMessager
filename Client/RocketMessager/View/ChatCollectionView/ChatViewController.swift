@@ -39,10 +39,8 @@ final class ChatViewController: UIViewController {
     
     private var layout = CollectionViewBuilder.buildCollectionViewLayout()
     
-    private lazy var inputTextField: RMTextField = {
-        let textField = RMTextField()
-        textField.borderStyle = .none
-        textField.placeholder = "Type a message..."
+    private lazy var inputTextField: UITextView = {
+        let textField = UITextView()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.backgroundColor = Config.Colors.inputTextFieldBackgroundColor
         textField.layer.masksToBounds = true
@@ -151,8 +149,8 @@ final class ChatViewController: UIViewController {
     }
 }
 
-extension ChatViewController: UITextFieldDelegate {
-    func textFieldDidChangeSelection(_ textField: UITextField) {
+extension ChatViewController: UITextViewDelegate {
+    private func textFieldDidChangeSelection(_ textField: UITextField) {
         if textField.text?.isEmpty == true {
             animateInputChatButton(false)
         } else {
