@@ -46,6 +46,7 @@ final class ChatViewController: UIViewController {
         textField.layer.masksToBounds = true
         textField.layer.cornerRadius = 13.0
         textField.delegate = self
+        textField.font = .systemFont(ofSize: 16)
         return textField
     }()
     
