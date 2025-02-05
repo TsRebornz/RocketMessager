@@ -151,8 +151,8 @@ final class ChatViewController: UIViewController {
 }
 
 extension ChatViewController: UITextViewDelegate {
-    private func textFieldDidChangeSelection(_ textField: UITextField) {
-        if textField.text?.isEmpty == true {
+    func textViewDidChange(_ textView: UITextView) {
+        if textView.text?.isEmpty == true {
             animateInputChatButton(false)
         } else {
             animateInputChatButton(true)
