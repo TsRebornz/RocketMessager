@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 // MARK: - Test
 final class TestMessageBuilder: MessageBuilder {
@@ -54,15 +55,39 @@ protocol MessageBuilder {
     func build() -> [MessageModel]
 }
 
+protocol MessageListDataProvider {
+    func subscribe() -> AnyPublisher<[MessageModel], Never>
+    func sendMessage(_ message: MessageModel)
+    func isTyping() -> AnyPublisher<Bool, Never>
+}
+
+class TestMessageListDataProvider: MessageListDataProvider {
+    func subscribe() -> AnyPublisher<[MessageModel], Never> {
+        return Just([]).eraseToAnyPublisher()
+    }
+    func sendMessage(_ message: MessageModel) {
+        //Just(false).eraseToAnyPublisher()
+    }
+    func isTyping() -> AnyPublisher<Bool, Never> {
+        return Just(false).eraseToAnyPublisher()
+    }
+}
+
 protocol ChatViewModelProtocol {
     var messages: [MessageModel] { get }
     func sendMessage(_ message: MessageModel)
 }
 
-class ChatViewModel: ChatViewModelProtocol {
+final class ChatViewModel: ChatViewModelProtocol {
     private let messageBuilder: MessageBuilder = TestMessageBuilder()
     
     lazy var messages = messageBuilder.build()
+    
+    private let messageDataProvider: MessageListDataProvider
+    
+    init(messageDataProvider: MessageListDataProvider) {
+        self.messageDataProvider = messageDataProvider
+    }
     
     func sendMessage(_ message: MessageModel) {
         messages.append(message)

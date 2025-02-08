@@ -35,7 +35,7 @@ final class ChatViewController: UIViewController {
         }
     }
     
-    private let viewModel: ChatViewModelProtocol = ChatViewModel()
+    private let viewModel: ChatViewModelProtocol
     
     private var layout = CollectionViewBuilder.buildCollectionViewLayout()
     
@@ -61,6 +61,17 @@ final class ChatViewController: UIViewController {
         frame: .zero,
         collectionViewLayout: UICollectionViewFlowLayout()
     )
+
+    // MARK: - Initializer
+    
+    init(viewModel: ChatViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - View lifecycle
     

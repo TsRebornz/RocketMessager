@@ -18,8 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: screenBounds)
         
         let navigationController = UINavigationController()
-        
-        var viewController = ChatViewController()
+        //FIXME: - Extract to builder
+        let testMessageProvider: MessageListDataProvider = TestMessageListDataProvider()
+        let chatViewModel = ChatViewModel(messageDataProvider: testMessageProvider)
+        var viewController = ChatViewController(viewModel: chatViewModel)
         navigationController.setViewControllers([viewController], animated: false)
         // FIXME: - Ref. Builder or dependency injection
         let model = ChatNavigationControllerModel(
