@@ -15,6 +15,7 @@
 		A19392FD2C820EA4007C6CC0 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19392FC2C820EA4007C6CC0 /* Colors.swift */; };
 		A195CF0E2B7E8D5F00635043 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = A195CF0D2B7E8D5F00635043 /* SocketIO */; };
 		A195CF102B7E96E300635043 /* RMSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A195CF0F2B7E96E300635043 /* RMSocketManager.swift */; };
+		A19741DB2D6646DD00D6F179 /* RMLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19741DA2D6646DD00D6F179 /* RMLogger.swift */; };
 		A1A00FBD2B7E4C8F006041C3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A00FBC2B7E4C8F006041C3 /* AppDelegate.swift */; };
 		A1A00FC62B7E4C90006041C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1A00FC52B7E4C90006041C3 /* Assets.xcassets */; };
 		A1A00FC92B7E4C90006041C3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A1A00FC72B7E4C90006041C3 /* LaunchScreen.storyboard */; };
@@ -35,6 +36,7 @@
 		A1749C432BBEEB1900B7B9D6 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		A19392FC2C820EA4007C6CC0 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		A195CF0F2B7E96E300635043 /* RMSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMSocketManager.swift; sourceTree = "<group>"; };
+		A19741DA2D6646DD00D6F179 /* RMLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RMLogger.swift; path = RocketMessager/RMLogger.swift; sourceTree = SOURCE_ROOT; };
 		A1A00FB92B7E4C8F006041C3 /* RocketMessager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RocketMessager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1A00FBC2B7E4C8F006041C3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A1A00FC52B7E4C90006041C3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				A1AF38D32C57CDC500A37878 /* Localization */,
 				A1AF38D62C57CDE100A37878 /* Images.xcassets */,
 				A1AF38D82C57CDED00A37878 /* Colors.xcassets */,
+				A19741DA2D6646DD00D6F179 /* RMLogger.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A19741DB2D6646DD00D6F179 /* RMLogger.swift in Sources */,
 				A195CF102B7E96E300635043 /* RMSocketManager.swift in Sources */,
 				A19392FD2C820EA4007C6CC0 /* Colors.swift in Sources */,
 				A1A598D82BF3807E00E13DA5 /* ChatCollectionViewLayout.swift in Sources */,
