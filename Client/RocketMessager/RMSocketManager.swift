@@ -18,6 +18,7 @@ final class RMSocketManager: RMSocketManagerProtocol {
     enum Event {
         case connect
         case connectUser(_ userName: String)
+        case sendMessage(_ message: String)
         
         // Naming?
         var toString: String {
@@ -26,6 +27,8 @@ final class RMSocketManager: RMSocketManagerProtocol {
                 return EventName.connect.rawValue
             case .connectUser:
                 return EventName.connectUser.rawValue
+            case .sendMessage(_):
+                return "message"
             }
         }
     }
@@ -42,29 +45,35 @@ final class RMSocketManager: RMSocketManagerProtocol {
     
     private let socketManager: SocketManager
     private var socket: SocketIOClient
+    private let logger: RMLogger
+    
+    private var uuid1: UUID?
     
     // MARK: - Init
     
-    init() {
+    init(
+        logger: RMLogger = RMLoggerBase()
+    ) {
         socketManager = SocketManager(
             // FIXME: - Testing socket
-            socketURL: URL(string: "http://192.168.2.116:3000")!,
-            config: [.log(true), .compress]
-        )
+            socketURL: URL(string: "http://192.168.2.64:3000")!,
+            config: [.log(true), .compress, .forceWebsockets(true)]
+        
         socket = socketManager.defaultSocket
+        self.logger = logger
     }
     
     func connect(_ userName: String) {
         socket.connect()
         
-        socket.on(clientEvent: .connect) { [weak self] data, ack in
+        uuid1 = socket.on(clientEvent: .connect) { [weak self] data, ack in
             guard let self else { return }
             sendEvent(.connectUser(userName))
         }
     }
     
     func sendMessage(_ string: String) {
-        // do nothing
+        sendEvent(.sendMessage(string))
     }
     
     // MARK: - Private
@@ -75,10 +84,8 @@ final class RMSocketManager: RMSocketManagerProtocol {
             socket.connect()
         case .connectUser(let userName):
             socket.emit(event.toString, userName)
-        default:
-            // do nothing
-            break
+        case .sendMessage(let message):
+            socket.emit(event.toString, message)
         }
-        
     }
 }

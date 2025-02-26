@@ -19,7 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let navigationController = UINavigationController()
         //FIXME: - Extract to builder
-        let testMessageProvider: MessageListDataProvider = TestMessageListDataProvider()
+        let socketManager: RMSocketManagerProtocol = RMSocketManager()
+        let testMessageProvider: MessageListDataProvider = MessageListDataProviderImpl(socketManager: socketManager)
         let chatViewModel = ChatViewModel(messageDataProvider: testMessageProvider)
         var viewController = ChatViewController(viewModel: chatViewModel)
         navigationController.setViewControllers([viewController], animated: false)

@@ -171,6 +171,11 @@ extension ChatViewController: UITextViewDelegate {
     }
 }
 
+/*
+ How to integrate Combine with
+ func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
+ */
+
 extension ChatViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.messages.count

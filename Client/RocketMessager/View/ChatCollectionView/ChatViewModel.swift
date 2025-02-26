@@ -56,21 +56,53 @@ protocol MessageBuilder {
 }
 
 protocol MessageListDataProvider {
-    func subscribe() -> AnyPublisher<[MessageModel], Never>
+    func getMessages(completionHandler: () -> Result<[MessageModel], Error>)
+    func subscribe() -> AnyPublisher<[MessageModel], Error>
     func sendMessage(_ message: MessageModel)
-    func isTyping() -> AnyPublisher<Bool, Never>
+    func isTyping() -> AnyPublisher<Bool, Error>
 }
 
-class TestMessageListDataProvider: MessageListDataProvider {
-    func subscribe() -> AnyPublisher<[MessageModel], Never> {
-        return Just([]).eraseToAnyPublisher()
+/// Create Message Model for Network layer to make them independent
+/// Who must create MessageModel? ViewModel exactly
+
+final class MessageListDataProviderImpl: MessageListDataProvider {
+    private let socketManager: RMSocketManagerProtocol
+    
+    private let testMessages: [MessageModel] = [
+        .init(
+            text: "Hii",
+            senderName: "Valera",
+            sendDate: Date(),
+            type: .currentUser,
+            isLastMessage: false
+        )
+    ]
+    
+    init(socketManager: RMSocketManagerProtocol) {
+        self.socketManager = socketManager
     }
+    
+    func subscribe() -> AnyPublisher<[MessageModel], Error> {
+        socketManager.connect("Test")
+        return Just([]).mapError({ _ in
+            Fail<Any, Error>(error: NSErrorDomain(string: "error") as! any Error) as! any Error
+        }).eraseToAnyPublisher()
+    }
+    
+    func getMessages(completionHandler: () -> Result<[MessageModel], any Error>) {
+        // do nothing
+    }
+    
     func sendMessage(_ message: MessageModel) {
-        //Just(false).eraseToAnyPublisher()
+        socketManager.sendMessage(message.text)
     }
-    func isTyping() -> AnyPublisher<Bool, Never> {
-        return Just(false).eraseToAnyPublisher()
+    
+    func isTyping() -> AnyPublisher<Bool, Error> {
+        return Just(false).mapError({ _ in
+            Fail<Any, Error>(error: NSErrorDomain(string: "error") as! any Error) as! any Error
+        }).eraseToAnyPublisher()
     }
+    
 }
 
 protocol ChatViewModelProtocol {
@@ -79,17 +111,41 @@ protocol ChatViewModelProtocol {
 }
 
 final class ChatViewModel: ChatViewModelProtocol {
-    private let messageBuilder: MessageBuilder = TestMessageBuilder()
     
-    lazy var messages = messageBuilder.build()
+    @Published var messages = [MessageModel]()
+    @Published var error: Error?
+    
+    private var cancellables: Set<AnyCancellable> = []
     
     private let messageDataProvider: MessageListDataProvider
     
     init(messageDataProvider: MessageListDataProvider) {
         self.messageDataProvider = messageDataProvider
+        setup()
+    }
+    
+    func setup() {
+        messageDataProvider.subscribe()
+        // FIXME: Add error handling
+//            .mapError { [weak self] error in
+//                self?.error = error
+//            }
+            .sink(receiveCompletion: { _ in
+                // do nothing
+            }, receiveValue: { [weak self] messages in
+                self?.messages = messages
+            })
+            // Можно попробовать сделать просто через sink
+//            .mapError({ error in
+//                self.error = error
+//                return
+//            })
+//            .values
+//            .assign(to: &messages, on: .self)
+//            .store(in: &cancellables)
     }
     
     func sendMessage(_ message: MessageModel) {
-        messages.append(message)
+        messageDataProvider.sendMessage(message)
     }
 }

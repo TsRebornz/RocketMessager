@@ -18,3 +18,7 @@ extension RMLogger {
         #endif
     }
 }
+
+final public class RMLoggerBase: RMLogger {
+    
+}
