@@ -78,6 +78,8 @@ final class MessageListDataProviderImpl: MessageListDataProvider {
         )
     ]
     
+    private let nickName: String = "Best"
+    
     init(socketManager: RMSocketManagerProtocol) {
         self.socketManager = socketManager
     }

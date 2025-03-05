@@ -18,24 +18,28 @@ final class RMSocketManager: RMSocketManagerProtocol {
     enum Event {
         case connect
         case connectUser(_ userName: String)
-        case sendMessage(_ message: String)
+        case sendMessage(_ userName: String, _ message: String)
         
         // Naming?
         var toString: String {
             switch self {
             case .connect:
-                return EventName.connect.rawValue
+                return ClientEventName.connect.rawValue
             case .connectUser:
-                return EventName.connectUser.rawValue
-            case .sendMessage(_):
+                return ClientEventName.connectUser.rawValue
+            case .sendMessage(_, _):
                 return "message"
             }
         }
     }
     
-    private enum EventName: String {
+    private enum ClientEventName: String {
         case connect
         case connectUser
+    }
+    
+    private enum ServerEventName: String {
+        case userConnectUpdate
     }
     
     // MARK: - Public
@@ -47,7 +51,9 @@ final class RMSocketManager: RMSocketManagerProtocol {
     private var socket: SocketIOClient
     private let logger: RMLogger
     
-    private var uuid1: UUID?
+    private var userId: String?
+    // FIXME: Remove force unwrapp
+    private var userData: UserData!
     
     // MARK: - Init
     
@@ -56,27 +62,96 @@ final class RMSocketManager: RMSocketManagerProtocol {
     ) {
         socketManager = SocketManager(
             // FIXME: - Testing socket
-            socketURL: URL(string: "http://192.168.2.64:3000")!,
+            socketURL: URL(string: "http://192.168.2.104:3000")!,
             config: [.log(true), .compress, .forceWebsockets(true)]
-        
+        )
         socket = socketManager.defaultSocket
         self.logger = logger
     }
     
-    func connect(_ userName: String) {
-        socket.connect()
+    // FIXME: Refactoring
+    private let jsonDecoder = JSONDecoder()
+    
+    struct UserData {
+        let nickName: String
+    }
+    
+    struct UserConnectUpdate: Decodable {
+        /*
+         Structure
+            {
+                id = "/#EBBk03Ca3zxqSJOjAAAB";
+                isConnected = 1;
+                nickname = Test;
+            }
+        */
+        let id: String
+        let isConnected: Bool
+        let nickname: String
         
-        uuid1 = socket.on(clientEvent: .connect) { [weak self] data, ack in
-            guard let self else { return }
-            sendEvent(.connectUser(userName))
+        enum CodingKeys: String, CodingKey {
+            case id
+            case isConnected
+            case nickname
+        }
+        
+        /*
+         extension Coordinate: Decodable {
+             init(from decoder: Decoder) throws {
+                 let values = try decoder.container(keyedBy: CodingKeys.self)
+                 latitude = try values.decode(Double.self, forKey: .latitude)
+                 longitude = try values.decode(Double.self, forKey: .longitude)
+                 
+                 let additionalInfo = try values.nestedContainer(keyedBy: AdditionalInfoKeys.self, forKey: .additionalInfo)
+                 elevation = try additionalInfo.decode(Double.self, forKey: .elevation)
+             }
+         }
+         */
+        init(from decoder: any Decoder) throws {
+            let values = try decoder.container(keyedBy: CodingKeys.self)
+            self.id = try values.decode(String.self, forKey: .id)
+            self.isConnected = (
+                try? values.decode(Int.self, forKey: .isConnected) > 0
+                ? true
+                : false
+            ) ?? false
+            self.nickname = try values.decode(String.self, forKey: .nickname)
         }
     }
     
-    func sendMessage(_ string: String) {
-        sendEvent(.sendMessage(string))
+    func connect(_ userName: String) {
+        socket.connect()
+        userData = .init(nickName: userName)
+        
+        socket.on(clientEvent: .connect) { [unowned self] data, ack in
+            self.sendEvent(.connectUser(userName))
+        }
+        
+        socket.on(ServerEventName.userConnectUpdate.rawValue) { [unowned self, jsonDecoder] invalidDataArray, emitter in
+            guard let data = invalidDataArray[0] as? NSDictionary else {
+                return
+            }
+                                
+            self.userId = data["id"] as? String
+        }
+        
+        socket.on("message") { dataArray, emitter in
+            guard let data = dataArray[0] as? NSDictionary else {
+                return
+            }
+            print("message is \(data)")
+        }
+    }
+    
+        func sendMessage(_ string: String) {        
+        sendEvent(.sendMessage(userData.nickName, string))
     }
     
     // MARK: - Private
+    
+    private func disconnect() {
+        socket.disconnect()
+    }
     
     private func sendEvent(_ event: Event) {
         switch event {
@@ -84,8 +159,8 @@ final class RMSocketManager: RMSocketManagerProtocol {
             socket.connect()
         case .connectUser(let userName):
             socket.emit(event.toString, userName)
-        case .sendMessage(let message):
-            socket.emit(event.toString, message)
+        case .sendMessage(let userName, let message):
+            socket.emit(event.toString, userName, message)
         }
     }
 }
