@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1563D2C2D7B5EF400733961 /* ChatListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1563D2B2D7B5EF400733961 /* ChatListTableViewController.swift */; };
 		A16432312CEE721D00AB0001 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16432302CEE721D00AB0001 /* ChatViewModel.swift */; };
 		A1749C402BBEE95D00B7B9D6 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = A1A00FD32B7E859D006041C3 /* SwiftProtobuf */; };
 		A1749C412BBEE95D00B7B9D6 /* SwiftProtobufPluginLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = A1A00FD52B7E859D006041C3 /* SwiftProtobufPluginLibrary */; };
@@ -32,6 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A1563D2B2D7B5EF400733961 /* ChatListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewController.swift; sourceTree = "<group>"; };
 		A16432302CEE721D00AB0001 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		A1749C432BBEEB1900B7B9D6 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		A19392FC2C820EA4007C6CC0 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -89,6 +91,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A1563D2A2D7B5EE900733961 /* ChatListTableView */ = {
+			isa = PBXGroup;
+			children = (
+				A1563D2B2D7B5EF400733961 /* ChatListTableViewController.swift */,
+			);
+			path = ChatListTableView;
+			sourceTree = "<group>";
+		};
 		A1A00FB02B7E4C8F006041C3 = {
 			isa = PBXGroup;
 			children = (
@@ -125,6 +135,7 @@
 		A1A598D52BF3805D00E13DA5 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A1563D2A2D7B5EE900733961 /* ChatListTableView */,
 				A1A598D62BF3805D00E13DA5 /* ChatCollectionView */,
 			);
 			path = View;
@@ -307,6 +318,7 @@
 				A1D522092C510A5A00B28818 /* CollectionViewBuilder.swift in Sources */,
 				A1D64BAB2C53B0170098825F /* UIColor + extension.swift in Sources */,
 				A1D64BA92C53B0060098825F /* UICollectionView + extension.swift in Sources */,
+				A1563D2C2D7B5EF400733961 /* ChatListTableViewController.swift in Sources */,
 				A16432312CEE721D00AB0001 /* ChatViewModel.swift in Sources */,
 				A1A00FBD2B7E4C8F006041C3 /* AppDelegate.swift in Sources */,
 			);
