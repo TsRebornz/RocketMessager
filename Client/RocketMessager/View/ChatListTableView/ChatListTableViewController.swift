@@ -9,6 +9,14 @@ import UIKit
 
 final class ChatListTableViewCell: UITableViewCell {
     static let cellIdentifier = "ChatListTableViewCell"
+    
+    var avatarImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
+        imageView.backgroundColor = .systemGray6
+        return imageView
+    }()
         
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -21,7 +29,14 @@ final class ChatListTableViewCell: UITableViewCell {
     }
     
     private func setupUI() {
-        // FIXME: -
+        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(avatarImageView)
+        
+        NSLayoutConstraint.activate([
+            avatarImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
+            avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            avatarImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 15)
+        ])
     }
 }
 
