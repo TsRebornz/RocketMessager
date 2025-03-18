@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A12E359C2D89E190002CCA3F /* ChatListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12E359B2D89E190002CCA3F /* ChatListTableViewCell.swift */; };
 		A1563D2C2D7B5EF400733961 /* ChatListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1563D2B2D7B5EF400733961 /* ChatListTableViewController.swift */; };
 		A16432312CEE721D00AB0001 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16432302CEE721D00AB0001 /* ChatViewModel.swift */; };
 		A1749C402BBEE95D00B7B9D6 /* SwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = A1A00FD32B7E859D006041C3 /* SwiftProtobuf */; };
@@ -33,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A12E359B2D89E190002CCA3F /* ChatListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewCell.swift; sourceTree = "<group>"; };
 		A1563D2B2D7B5EF400733961 /* ChatListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewController.swift; sourceTree = "<group>"; };
 		A16432302CEE721D00AB0001 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		A1749C432BBEEB1900B7B9D6 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
