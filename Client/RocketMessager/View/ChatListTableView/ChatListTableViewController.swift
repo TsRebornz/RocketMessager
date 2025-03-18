@@ -15,7 +15,25 @@ final class ChatListTableViewCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.backgroundColor = .systemGray6
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
+    }()
+    
+    var nameLabel: UILabel = {
+        let label = UILabel()
+        return label
+    }()
+    
+    var statusLabel: UILabel = {
+        let label = UILabel()
+        return label
+    }()
+    
+    lazy var stackView: UIStackView = {
+        var stackView = UIStackView(arrangedSubviews: [nameLabel, statusLabel])
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        return stackView
     }()
         
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -28,14 +46,29 @@ final class ChatListTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setup() {
+        nameLabel.text = "Name"
+        statusLabel.text = "Status"
+    }
+    
     private func setupUI() {
-        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
+        
         contentView.addSubview(avatarImageView)
         
         NSLayoutConstraint.activate([
             avatarImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
-            avatarImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 15)
+            avatarImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15),
+            avatarImageView.widthAnchor.constraint(equalToConstant: 50),
+            avatarImageView.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
+        contentView.addSubview(stackView)
+        
+        NSLayoutConstraint.activate([
+            stackView.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
         ])
     }
 }
@@ -53,6 +86,8 @@ final class ChatListTableViewController: UIViewController, UITableViewDataSource
         ) as? ChatListTableViewCell else {
             return UITableViewCell()
         }
+        
+        cell.setup()
         
         return cell
     }
@@ -73,16 +108,17 @@ final class ChatListTableViewController: UIViewController, UITableViewDataSource
             ChatListTableViewCell.self,
             forCellReuseIdentifier: ChatListTableViewCell.cellIdentifier
         )
-        tableView.rowHeight = 64
+
         tableView.dataSource = self
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
-        NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        NSLayoutConstraint.activate(
+            [
+                tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                tableView.topAnchor.constraint(equalTo: view.topAnchor),
+                tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             ]
         )
     }
