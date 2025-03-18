@@ -55,6 +55,7 @@
 		A1D64BA62C53B0060098825F /* UIFont + extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont + extension.swift"; sourceTree = "<group>"; };
 		A1D64BA72C53B0060098825F /* UICollectionView + extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView + extension.swift"; sourceTree = "<group>"; };
 		A1D64BAA2C53B0170098825F /* UIColor + extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + extension.swift"; sourceTree = "<group>"; };
+		A1DEB8582D89E3FC00B64FB0 /* RMTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMTextField.swift; sourceTree = "<group>"; };
 		BD56CF8C9A0D667CE6A5E69F /* Pods-RocketMessager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RocketMessager.debug.xcconfig"; path = "Target Support Files/Pods-RocketMessager/Pods-RocketMessager.debug.xcconfig"; sourceTree = "<group>"; };
 		E5DA28B68FFDF7FFF8C87233 /* Pods_RocketMessager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RocketMessager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD9472407FE256BD5D46B2B6 /* Pods-RocketMessager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RocketMessager.release.xcconfig"; path = "Target Support Files/Pods-RocketMessager/Pods-RocketMessager.release.xcconfig"; sourceTree = "<group>"; };
@@ -97,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				A1563D2B2D7B5EF400733961 /* ChatListTableViewController.swift */,
+				A12E359B2D89E190002CCA3F /* ChatListTableViewCell.swift */,
 			);
 			path = ChatListTableView;
 			sourceTree = "<group>";
@@ -187,6 +189,7 @@
 			children = (
 				A1D64BA52C53B0060098825F /* Extensions */,
 				A19392FC2C820EA4007C6CC0 /* Colors.swift */,
+				A1DEB8582D89E3FC00B64FB0 /* RMTextField.swift */,
 			);
 			path = UIBox;
 			sourceTree = "<group>";
@@ -310,6 +313,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1DEB8592D89E3FC00B64FB0 /* RMTextField.swift in Sources */,
 				A19741DB2D6646DD00D6F179 /* RMLogger.swift in Sources */,
 				A195CF102B7E96E300635043 /* RMSocketManager.swift in Sources */,
 				A19392FD2C820EA4007C6CC0 /* Colors.swift in Sources */,
@@ -319,6 +323,7 @@
 				A1749C442BBEEB1900B7B9D6 /* ChatViewController.swift in Sources */,
 				A1D522092C510A5A00B28818 /* CollectionViewBuilder.swift in Sources */,
 				A1D64BAB2C53B0170098825F /* UIColor + extension.swift in Sources */,
+				A12E359C2D89E190002CCA3F /* ChatListTableViewCell.swift in Sources */,
 				A1D64BA92C53B0060098825F /* UICollectionView + extension.swift in Sources */,
 				A1563D2C2D7B5EF400733961 /* ChatListTableViewController.swift in Sources */,
 				A16432312CEE721D00AB0001 /* ChatViewModel.swift in Sources */,
