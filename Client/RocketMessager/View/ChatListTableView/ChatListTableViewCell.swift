@@ -65,11 +65,19 @@ final class ChatListTableViewCell: UITableViewCell {
         contentView.addSubview(avatarImageView)
         
         NSLayoutConstraint.activate([
-            avatarImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
-            avatarImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15),
-            avatarImageView.widthAnchor.constraint(equalToConstant: 50),
-            avatarImageView.heightAnchor.constraint(equalToConstant: 50)
+            avatarImageView.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor,
+                constant: Config.Layout.horizontalInset
+            ),
+            avatarImageView.topAnchor.constraint(
+                equalTo: contentView.topAnchor,
+                constant: Config.Layout.verticalInset
+            ),
+            avatarImageView.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor, constant: -Config.Layout.verticalInset
+            ),
+            avatarImageView.widthAnchor.constraint(equalToConstant: Config.Layout.imageSizeSide),
+            avatarImageView.heightAnchor.constraint(equalToConstant: Config.Layout.imageSizeSide)
         ])
         
         contentView.addSubview(stackView)

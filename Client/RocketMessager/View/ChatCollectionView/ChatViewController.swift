@@ -7,18 +7,6 @@
 
 import UIKit
 
-// FIXME: Extract to file
-class RMTextField: UITextField {
-    override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return CGRectInset(bounds, 10, 10)
-    }
-    
-    override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return CGRectInset(bounds, 10, 10)
-    }
-}
-
-
 final class ChatViewController: UIViewController {
     
     enum Config {

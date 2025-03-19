@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 final class ChatListTableViewController: UIViewController, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
