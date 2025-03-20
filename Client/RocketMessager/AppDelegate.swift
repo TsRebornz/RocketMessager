@@ -7,6 +7,47 @@
 
 import UIKit
 
+class tNameViewController: UIViewController {
+    
+    var transferToNextScreen: ((_ name: String) -> Void)?
+    
+    let nameTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Enter your name"
+        return textField
+    }()
+    
+    let button: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Next", for: .normal)
+        button.addTarget(self, action: #selector(handleNext), for: .touchUpInside)
+        return button
+    }()
+    
+    override func viewDidLoad() {
+        setupUI()
+    }
+    
+    @objc func handleNext() {
+        guard let text = nameTextField.text, let transferToNextScreen else {
+            fatalError("No name")
+            return
+        }
+        transferToNextScreen(text)
+    }
+    
+    func setupUI() {
+        let stackView = UIStackView(arrangedSubviews: [nameTextField, button])
+        view.addSubview(stackView)
+        NSLayoutConstraint.activate(
+            [
+                stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            ]
+        )
+    }
+}
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
