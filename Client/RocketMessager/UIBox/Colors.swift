@@ -59,7 +59,3 @@ enum DesignColors {
         static let statusTextColor = UIColor.RM.gray2
     }
 }
-
-extension UIColor {
-    
-}
