@@ -33,6 +33,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         viewController = ChatNavigationContollerConfigurator.configureChat(viewController: viewController, model: model) as! ChatViewController
         
         window?.rootViewController = navigationController
+        let alertController = buildActionViewController { newUserName in
+            testMessageProvider.nickName = newUserName
+            print(newUserName)
+        }
+        
         window?.makeKeyAndVisible()
                 
         return true

@@ -56,6 +56,7 @@ protocol MessageBuilder {
 }
 
 protocol MessageListDataProvider {
+    var nickName: String? { get set }
     func getMessages(completionHandler: () -> Result<[MessageModel], Error>)
     func subscribe() -> AnyPublisher<[MessageModel], Error>
     func sendMessage(_ message: MessageModel)
@@ -78,7 +79,8 @@ final class MessageListDataProviderImpl: MessageListDataProvider {
         )
     ]
     
-    private let nickName: String = "Best"
+    // FIXME: -
+    var nickName: String?
     
     init(socketManager: RMSocketManagerProtocol) {
         self.socketManager = socketManager
