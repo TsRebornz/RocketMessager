@@ -40,6 +40,7 @@ final class RMSocketManager: RMSocketManagerProtocol {
     
     private enum ServerEventName: String {
         case userConnectUpdate
+        case users
     }
     
     // MARK: - Public
@@ -62,7 +63,7 @@ final class RMSocketManager: RMSocketManagerProtocol {
     ) {
         socketManager = SocketManager(
             // FIXME: - Testing socket
-            socketURL: URL(string: "http://192.168.2.104:3000")!,
+            socketURL: URL(string: "http://192.168.2.83:3000")!,
             config: [.log(true), .compress, .forceWebsockets(true)]
         )
         socket = socketManager.defaultSocket
@@ -133,6 +134,15 @@ final class RMSocketManager: RMSocketManagerProtocol {
             }
                                 
             self.userId = data["id"] as? String
+        }
+        
+        socket.on(ServerEventName.users.rawValue) { dataArray, _ in
+            print("ServerEventName.users called")
+            guard let data = dataArray[0] as? NSDictionary else {
+                fatalError("puk")
+                return
+            }
+            print("ServerEventName.users called data \(data)")
         }
         
         socket.on("message") { dataArray, emitter in

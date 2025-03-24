@@ -9,6 +9,23 @@ import UIKit
 
 final class ChatListTableViewController: UIViewController, UITableViewDataSource {
     
+    // MARK: - Private
+    
+    private let chatListViewModel: ChatListViewModelProtocol
+    
+    // MARK: - Init
+    
+    init(chatListViewModel: ChatListViewModelProtocol) {
+        self.chatListViewModel = chatListViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - TableView
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         10
     }

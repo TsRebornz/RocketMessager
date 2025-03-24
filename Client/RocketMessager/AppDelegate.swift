@@ -61,23 +61,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navigationController = UINavigationController()
         //FIXME: - Extract to builder
         let socketManager: RMSocketManagerProtocol = RMSocketManager()
-        let testMessageProvider: MessageListDataProvider = MessageListDataProviderImpl(socketManager: socketManager)
+        var testMessageProvider: MessageListDataProvider = MessageListDataProviderImpl(
+            socketManager: socketManager
+        )
+        // FIXME: - Extact to builder
         let chatViewModel = ChatViewModel(messageDataProvider: testMessageProvider)
+        let mockNameViewController = tNameViewController()
+        let chatListViewModel = ChatListViewModel(socketManager: socketManager)
+        let chatListViewController = ChatListTableViewController(chatListViewModel: chatListViewModel)
         var viewController = ChatViewController(viewModel: chatViewModel)
-        navigationController.setViewControllers([viewController], animated: false)
+        navigationController.setViewControllers([mockNameViewController], animated: false)
         // FIXME: - Ref. Builder or dependency injection
         let model = ChatNavigationControllerModel(
             title: "John Abraham",
             subtitle: "Active now",
             avatar: #imageLiteral(resourceName: "AvatarTest")
         )
+        
         viewController = ChatNavigationContollerConfigurator.configureChat(viewController: viewController, model: model) as! ChatViewController
         
-        window?.rootViewController = navigationController
-        let alertController = buildActionViewController { newUserName in
-            testMessageProvider.nickName = newUserName
-            print(newUserName)
+        mockNameViewController.transferToNextScreen = { name in
+            navigationController.pushViewController(chatListViewController, animated: true)
         }
+        window?.rootViewController = navigationController
         
         window?.makeKeyAndVisible()
                 
@@ -112,7 +118,7 @@ final class RMNavigationControllerTitleView: UIView {
     
     enum Config {
         enum Colors {
-            static let titleTextColor = DesignColors.ChatTitle.tileTextColor
+            static let titleTextColor = DesignColors.ChatTitle.titleTextColor
             static let subtitleTextColor = DesignColors.ChatTitle.subtitleTextColor
         }
     }
@@ -175,7 +181,7 @@ final class RMNavigationControllerTitleView: UIView {
                 labelsStackView.topAnchor.constraint(
                     equalTo: topAnchor,
                     constant: 0.0
-                ),
+                ),                
                 labelsStackView.bottomAnchor.constraint(
                     equalTo: bottomAnchor,
                     constant: 0.0

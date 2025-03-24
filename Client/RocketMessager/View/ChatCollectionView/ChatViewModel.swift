@@ -87,7 +87,11 @@ final class MessageListDataProviderImpl: MessageListDataProvider {
     }
     
     func subscribe() -> AnyPublisher<[MessageModel], Error> {
-        socketManager.connect("Test")
+        guard let nickName else {
+            fatalError("nickName is nil")
+        }
+        
+        socketManager.connect(nickName)
         return Just([]).mapError({ _ in
             Fail<Any, Error>(error: NSErrorDomain(string: "error") as! any Error) as! any Error
         }).eraseToAnyPublisher()
@@ -125,7 +129,6 @@ final class ChatViewModel: ChatViewModelProtocol {
     
     init(messageDataProvider: MessageListDataProvider) {
         self.messageDataProvider = messageDataProvider
-        setup()
     }
     
     func setup() {

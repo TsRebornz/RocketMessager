@@ -31,6 +31,7 @@
 		A1D64BA92C53B0060098825F /* UICollectionView + extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D64BA72C53B0060098825F /* UICollectionView + extension.swift */; };
 		A1D64BAB2C53B0170098825F /* UIColor + extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D64BAA2C53B0170098825F /* UIColor + extension.swift */; };
 		A1DEB85B2D89E44900B64FB0 /* RMTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DEB85A2D89E44900B64FB0 /* RMTextField.swift */; };
+		A1DEB85D2D92117A00B64FB0 /* ChatListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DEB85C2D92117A00B64FB0 /* ChatListViewModel.swift */; };
 		FCA67909C37C991F0B37F53E /* Pods_RocketMessager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5DA28B68FFDF7FFF8C87233 /* Pods_RocketMessager.framework */; };
 /* End PBXBuildFile section */
 
