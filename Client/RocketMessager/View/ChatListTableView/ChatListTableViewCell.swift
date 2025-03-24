@@ -99,8 +99,7 @@ final class ChatListTableViewCell: UITableViewCell {
             avatarImageView.bottomAnchor.constraint(
                 equalTo: contentView.bottomAnchor, constant: -Config.Layout.verticalInset
             ),
-            avatarImageView.widthAnchor.constraint(equalToConstant: Config.Layout.imageSizeSide),
-            avatarImageView.heightAnchor.constraint(equalToConstant: Config.Layout.imageSizeSide)
+            avatarImageView.widthAnchor.constraint(equalTo: avatarImageView.heightAnchor)
         ])
         
         contentView.addSubview(stackView)
