@@ -95,6 +95,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
+// FIXME: - Extract to separate file
+
+protocol BuildData {
+    
+}
+
+protocol Buildable {
+    associatedtype Product
+    func build(_ data: any BuildData) -> Product
+}
+
+struct ChatListBuildData: BuildData {
+    let nickName: String
+    let socketManager: RMSocketManagerProtocol
+}
+
+final class ChatListBuilder: Buildable {
+    typealias Product = ChatListTableViewController
+    
+    func build(_ data: any BuildData) -> ChatListTableViewController {
+        guard let builderData = data as? ChatListBuildData else {
+            fatalError("Unsupported data type")
+        }
+        
+        let viewModel = ChatListViewModel(
+            socketManager: builderData.socketManager,
+            nickName: builderData.nickName
+        )
+        return ChatListTableViewController(chatListViewModel: viewModel)
+    }
+}
+
 struct ChatNavigationControllerModel {
     let title: String
     let subtitle: String
