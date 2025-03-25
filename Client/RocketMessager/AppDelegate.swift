@@ -37,7 +37,10 @@ class tNameViewController: UIViewController {
     }
     
     func setupUI() {
+        view.backgroundColor = .white
         let stackView = UIStackView(arrangedSubviews: [nameTextField, button])
+        stackView.axis = .vertical
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stackView)
         NSLayoutConstraint.activate(
             [
@@ -59,6 +62,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: screenBounds)
         
         let navigationController = UINavigationController()
+        
         //FIXME: - Extract to builder
         let socketManager: RMSocketManagerProtocol = RMSocketManager()
         var testMessageProvider: MessageListDataProvider = MessageListDataProviderImpl(
