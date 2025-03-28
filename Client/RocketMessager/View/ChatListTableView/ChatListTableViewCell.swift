@@ -76,9 +76,9 @@ final class ChatListTableViewCell: UITableViewCell {
     
     // MARK: - Public methods
     
-    func setup() {
-        nameLabel.text = "Name"
-        statusLabel.text = "Status"
+    func setup(nickName: String, status: String) {
+        nameLabel.text = nickName
+        statusLabel.text = status
     }
     
     // MARK: - Private methods

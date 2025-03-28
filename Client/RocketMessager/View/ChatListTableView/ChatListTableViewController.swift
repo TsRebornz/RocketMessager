@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import Combine
 
 final class ChatListTableViewController: UIViewController, UITableViewDataSource {
     
     // MARK: - Private
     
     private let viewModel: ChatListViewModelProtocol
+    private var cancellable = Set<AnyCancellable>()
     
     // MARK: - Init
     
@@ -27,18 +29,20 @@ final class ChatListTableViewController: UIViewController, UITableViewDataSource
     // MARK: - TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        10
+        return viewModel.chats.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: ChatListTableViewCell.cellIdentifier,
             for: indexPath
-        ) as? ChatListTableViewCell else {
+        ) as? ChatListTableViewCell,
+              let chatData = viewModel.chats.enumerated().first(where: { $0.offset == indexPath.row })?.element
+        else {
             return UITableViewCell()
         }
         
-        cell.setup()
+        cell.setup(nickName: chatData.nickName, status: chatData.id)
         
         return cell
     }
@@ -49,6 +53,7 @@ final class ChatListTableViewController: UIViewController, UITableViewDataSource
         
         setupUI()
         viewModel.setup()
+        subscribeToViewModelOutputs()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,5 +78,19 @@ final class ChatListTableViewController: UIViewController, UITableViewDataSource
                 tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
             ]
         )
+    }
+    
+    private func subscribeToViewModelOutputs() {
+        viewModel.chats
+            .publisher
+            .removeDuplicates(by: {
+                $0 == $1
+            })
+            .sink { _ in
+                // do nothing
+            } receiveValue: { [tableView] _ in
+                tableView.reloadData()
+            }
+            .store(in: &cancellable)
     }
 }

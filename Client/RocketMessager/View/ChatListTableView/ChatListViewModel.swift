@@ -8,8 +8,9 @@
 import Foundation
 import Combine
 
-struct ChatModel {
-    
+struct ChatModel: Equatable {
+    let nickName: String
+    let id: String
 }
 
 protocol ChatListViewModelProtocol {
@@ -34,17 +35,19 @@ public final class ChatListViewModel: ObservableObject, ChatListViewModelProtoco
         self.nickName = nickName
     }
     
-    /*
-     What's problem? Need to transfer nick
-     */
-    
     func setup() {
         socketManager.connect(nickName)
-        socketManager.usersPublisher.sink { competion in
-//            print(competion)
-        } receiveValue: { data in
-//            print(data)
-        }.store(in: &anyCancellableSet)
+                
+        socketManager.usersPublisher
+            .map({ usersRaw in
+                return usersRaw.map { ChatModel(nickName: $0.nickname, id: $0.id) }
+            })
+            .sink(receiveCompletion: { _ in
+                // do nothing
+            }, receiveValue: { [weak self] users in
+                self?.chats = users
+            })
+            .store(in: &anyCancellableSet)
     }
 }
 
