@@ -7,10 +7,17 @@
 
 import Foundation
 import SocketIO
+import Combine
 
 protocol RMSocketManagerProtocol {
     func connect(_ userName: String)
     func sendMessage(_ string: String)
+        
+    var usersPublisher: AnyPublisher<[RMSocketManager.UserConnectUpdate], Error> { get }
+}
+
+public enum RMSocketError: Error {
+    case parsingError
 }
 
 final class RMSocketManager: RMSocketManagerProtocol {
@@ -45,6 +52,9 @@ final class RMSocketManager: RMSocketManagerProtocol {
     
     // MARK: - Public
     
+    lazy var usersPublisher = currentUsersPubliser.eraseToAnyPublisher()
+    
+    private var currentUsersPubliser = CurrentValueSubject<[UserConnectUpdate], Error>([])
 
     // MARK: - Private
     
@@ -97,6 +107,13 @@ final class RMSocketManager: RMSocketManagerProtocol {
         }
         
         
+        init(data: [String: AnyObject]) {
+            // FIXME: Remove forceunwraps
+            self.id = data["id"] as! String
+            self.isConnected = (data["isConnected"] as! Int) > 0
+            self.nickname = data["nickname"] as! String
+        }
+        
         init(from decoder: any Decoder) throws {
             let values = try decoder.container(keyedBy: CodingKeys.self)
             self.id = try values.decode(String.self, forKey: .id)
@@ -117,7 +134,7 @@ final class RMSocketManager: RMSocketManagerProtocol {
             self.sendEvent(.connectUser(userName))
         }
         
-        socket.on(ServerEventName.userConnectUpdate.rawValue) { [unowned self, jsonDecoder] invalidDataArray, emitter in
+        socket.on(ServerEventName.userConnectUpdate.rawValue) { [unowned self] invalidDataArray, emitter in
             guard let data = invalidDataArray[0] as? NSDictionary else {
                 return
             }
@@ -125,13 +142,14 @@ final class RMSocketManager: RMSocketManagerProtocol {
             self.userId = data["id"] as? String
         }
         
-        socket.on(ServerEventName.users.rawValue) { dataArray, _ in
-            print("ServerEventName.users called")
-            guard let data = dataArray[0] as? NSDictionary else {
-                fatalError("puk")
+        socket.on(ServerEventName.users.rawValue) { [weak self] dataArray, _ in
+            guard let dataArray = (dataArray.first as? Array<[String: AnyObject]>) else {
+                self?.currentUsersPubliser.send(completion: .failure(RMSocketError.parsingError))
                 return
             }
-            print("ServerEventName.users called data \(data)")
+            var usersDictionary = [String: AnyObject]()
+            let users = dataArray.compactMap { return UserConnectUpdate(data: $0) }
+            self?.currentUsersPubliser.send(users)
         }
         
         socket.on("message") { dataArray, emitter in

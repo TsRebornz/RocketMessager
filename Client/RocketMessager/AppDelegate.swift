@@ -71,8 +71,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // FIXME: - Extact to builder
         let chatViewModel = ChatViewModel(messageDataProvider: testMessageProvider)
         let mockNameViewController = tNameViewController()
-        let chatListViewModel = ChatListViewModel(socketManager: socketManager)
-        let chatListViewController = ChatListTableViewController(chatListViewModel: chatListViewModel)
+        
+        
         var viewController = ChatViewController(viewModel: chatViewModel)
         navigationController.setViewControllers([mockNameViewController], animated: false)
         // FIXME: - Ref. Builder or dependency injection
@@ -85,6 +85,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         viewController = ChatNavigationContollerConfigurator.configureChat(viewController: viewController, model: model) as! ChatViewController
         
         mockNameViewController.transferToNextScreen = { name in
+            let chatListBuildData: ChatListBuildData = ChatListBuildData(
+                nickName: name,
+                socketManager: socketManager
+            )
+            let chatListBuilder: ChatListBuilder = ChatListBuilder()
+            let chatListViewController = chatListBuilder.build(chatListBuildData as! BuildData)
             navigationController.pushViewController(chatListViewController, animated: true)
         }
         window?.rootViewController = navigationController

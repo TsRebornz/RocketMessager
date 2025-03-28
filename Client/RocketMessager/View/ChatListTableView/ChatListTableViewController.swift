@@ -11,12 +11,12 @@ final class ChatListTableViewController: UIViewController, UITableViewDataSource
     
     // MARK: - Private
     
-    private let chatListViewModel: ChatListViewModelProtocol
+    private let viewModel: ChatListViewModelProtocol
     
     // MARK: - Init
     
     init(chatListViewModel: ChatListViewModelProtocol) {
-        self.chatListViewModel = chatListViewModel
+        self.viewModel = chatListViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -48,6 +48,7 @@ final class ChatListTableViewController: UIViewController, UITableViewDataSource
     override func viewDidLoad() {
         
         setupUI()
+        viewModel.setup()
     }
     
     override func viewWillAppear(_ animated: Bool) {
