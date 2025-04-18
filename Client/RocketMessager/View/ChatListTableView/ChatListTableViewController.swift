@@ -81,11 +81,8 @@ final class ChatListTableViewController: UIViewController, UITableViewDataSource
     }
     
     private func subscribeToViewModelOutputs() {
-        viewModel.chats
-            .publisher
-            .removeDuplicates(by: {
-                $0 == $1
-            })
+        viewModel.chatsPublisher
+            .receive(on: DispatchQueue.main)
             .sink { _ in
                 // do nothing
             } receiveValue: { [tableView] _ in

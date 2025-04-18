@@ -15,6 +15,11 @@ struct ChatModel: Equatable {
 
 protocol ChatListViewModelProtocol {
     var chats: [ChatModel] { get }
+    
+    var chatsPublisher: Published<[ChatModel]>.Publisher { get }
+    
+    var chatsPublished: Published<[ChatModel]> { get }
+    
     func setup()
 }
 
@@ -25,6 +30,10 @@ public final class ChatListViewModel: ObservableObject, ChatListViewModelProtoco
     }
     
     @Published var chats: [ChatModel] = []
+    
+    var chatsPublished: Published<[ChatModel]> { _chats }
+    
+    var chatsPublisher: Published<[ChatModel]>.Publisher { $chats }
     
     private let socketManager: RMSocketManagerProtocol
     private let nickName: String
