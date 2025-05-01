@@ -55,11 +55,7 @@ final class ChatListTableViewController: UIViewController, UITableViewDataSource
         viewModel.setup()
         subscribeToViewModelOutputs()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        tableView.reloadData()
-    }
-    
+        
     private func setupUI() {
         tableView.register(
             ChatListTableViewCell.self,

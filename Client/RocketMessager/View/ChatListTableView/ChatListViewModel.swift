@@ -23,7 +23,7 @@ protocol ChatListViewModelProtocol {
     func setup()
 }
 
-public final class ChatListViewModel: ObservableObject, ChatListViewModelProtocol {
+public final class ChatListViewModel: ChatListViewModelProtocol {
     
     enum Event {
         case viewDidLoad

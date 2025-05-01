@@ -73,7 +73,7 @@ final class RMSocketManager: RMSocketManagerProtocol {
     ) {
         socketManager = SocketManager(
             // FIXME: - Testing socket
-            socketURL: URL(string: "http://192.168.2.83:3000")!,
+            socketURL: URL(string: "http://192.168.2.110:3000")!,
             config: [.log(true), .compress, .forceWebsockets(true)]
         )
         socket = socketManager.defaultSocket
