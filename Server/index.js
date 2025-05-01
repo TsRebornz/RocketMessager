@@ -2,6 +2,8 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+// DEBUG=socket.io:client* node index.js
+
 var userList = [];
 var typingUsers = {};
 var port = 3000
@@ -79,6 +81,9 @@ io.on('connection', function(clientSocket){
         userInfo["isConnected"] = true
         userList.push(userInfo);
       }
+
+      var messageUserList = "User list " + userList;
+      console.log(messageUserList);
 
       io.emit("users", userList);
       io.emit("userConnectUpdate", userInfo)
