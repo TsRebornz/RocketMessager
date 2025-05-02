@@ -147,8 +147,9 @@ final class RMSocketManager: RMSocketManagerProtocol {
                 self?.currentUsersPubliser.send(completion: .failure(RMSocketError.parsingError))
                 return
             }
-            var usersDictionary = [String: AnyObject]()
-            let users = dataArray.compactMap { return UserConnectUpdate(data: $0) }
+            let users = unwrappedDataArray
+                .compactMap { return UserConnectUpdate(data: $0) }
+                .filter { $0.nickname != userName }
             self?.currentUsersPubliser.send(users)
         }
         
