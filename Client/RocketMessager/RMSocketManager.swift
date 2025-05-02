@@ -143,7 +143,7 @@ final class RMSocketManager: RMSocketManagerProtocol {
         }
         
         socket.on(ServerEventName.users.rawValue) { [weak self] dataArray, _ in
-            guard let dataArray = (dataArray.first as? Array<[String: AnyObject]>) else {
+            guard let unwrappedDataArray = (dataArray.first as? Array<[String: AnyObject]>) else {
                 self?.currentUsersPubliser.send(completion: .failure(RMSocketError.parsingError))
                 return
             }
