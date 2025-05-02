@@ -4,7 +4,7 @@
   "description": "Socket.IO Client for iOS Tutorial, Server-side implementation",
   "dependencies": {
     "debug": "^4.4.0",
-    "express": "^4.10.2",
+    "express": "^4.21.2",
     "socket.io": "^4.8.1"
   }
 }
