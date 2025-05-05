@@ -7,19 +7,28 @@
 
 import UIKit
 
-protocol Coordinator {
-    func coordinateToChatList()
+protocol ChatCoordinatorProtocol {
+    func coordinateToChatList(name: String)
 }
 
-final class ChatCoordinator: Coordinator {
+final class ChatCoordinator: ChatCoordinatorProtocol {
     
     private weak var navigationController: UINavigationController!
+    private var socketManager: RMSocketManagerProtocol
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, socketManager: RMSocketManagerProtocol) {
         self.navigationController = navigationController
+        self.socketManager = socketManager
     }
     
-    func coordinateToChatList() {
-        
+    func coordinateToChatList(name: String) {
+        let chatListBuildData: ChatListBuildData = ChatListBuildData(
+            nickName: name,
+            // TODO: Dependency Injection
+            socketManager: socketManager
+        )
+        let chatListBuilder: ChatListBuilder = ChatListBuilder()
+        let chatListViewController = chatListBuilder.build(chatListBuildData as! BuildData)
+        navigationController.pushViewController(chatListViewController, animated: true)
     }
 }

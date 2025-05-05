@@ -54,6 +54,7 @@ class tNameViewController: UIViewController {
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var coordinator: ChatCoordinatorProtocol?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -74,6 +75,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         var viewController = ChatViewController(viewModel: chatViewModel)
         navigationController.setViewControllers([mockNameViewController], animated: false)
+        
+        coordinator = ChatCoordinator(
+            navigationController: navigationController,
+            socketManager: socketManager
+        )
+        
         // FIXME: - Ref. Builder or dependency injection
         let model = ChatNavigationControllerModel(
             title: "John Abraham",
@@ -83,14 +90,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         viewController = ChatNavigationContollerConfigurator.configureChat(viewController: viewController, model: model) as! ChatViewController
         
-        mockNameViewController.transferToNextScreen = { name in
-            let chatListBuildData: ChatListBuildData = ChatListBuildData(
-                nickName: name,
-                socketManager: socketManager
-            )
-            let chatListBuilder: ChatListBuilder = ChatListBuilder()
-            let chatListViewController = chatListBuilder.build(chatListBuildData as! BuildData)
-            navigationController.pushViewController(chatListViewController, animated: true)
+        mockNameViewController.transferToNextScreen = { [coordinator] name in
+            coordinator?.coordinateToChatList(name: name)
         }
         window?.rootViewController = navigationController
         
