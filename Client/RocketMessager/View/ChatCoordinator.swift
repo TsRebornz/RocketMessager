@@ -28,7 +28,7 @@ final class ChatCoordinator: ChatCoordinatorProtocol {
             socketManager: socketManager
         )
         let chatListBuilder: ChatListBuilder = ChatListBuilder()
-        let chatListViewController = chatListBuilder.build(chatListBuildData as! BuildData)
+        let chatListViewController = chatListBuilder.build(chatListBuildData as BuildData)
         navigationController.pushViewController(chatListViewController, animated: true)
     }
 }

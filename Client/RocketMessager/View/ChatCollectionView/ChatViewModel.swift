@@ -149,7 +149,7 @@ final class ChatViewModel: ChatViewModelProtocol {
 //            })
 //            .values
 //            .assign(to: &messages, on: .self)
-//            .store(in: &cancellables)
+            .store(in: &cancellables)
     }
     
     func sendMessage(_ message: MessageModel) {
