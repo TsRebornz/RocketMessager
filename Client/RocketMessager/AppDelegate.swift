@@ -29,11 +29,10 @@ class tNameViewController: UIViewController {
     }
     
     @objc func handleNext() {
-        guard let text = nameTextField.text, let transferToNextScreen else {
-            fatalError("No name")
+        guard let text = nameTextField.text else {
             return
         }
-        transferToNextScreen(text)
+        transferToNextScreen?(text)
     }
     
     func setupUI() {
