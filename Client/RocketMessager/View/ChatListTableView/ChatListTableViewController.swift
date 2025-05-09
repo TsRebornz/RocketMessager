@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class ChatListTableViewController: UIViewController, UITableViewDataSource {
+final class ChatListTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     // MARK: - Private
     
@@ -47,6 +47,12 @@ final class ChatListTableViewController: UIViewController, UITableViewDataSource
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard 0..<viewModel.chats.count ~= indexPath.row else { return }
+        let model = viewModel.chats[indexPath.row]
+        viewModel.selectedChat(chatModel: model)
+    }
+    
     private let tableView = UITableView()
     
     override func viewDidLoad() {
@@ -63,6 +69,7 @@ final class ChatListTableViewController: UIViewController, UITableViewDataSource
         )
 
         tableView.dataSource = self
+        tableView.delegate = self
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)

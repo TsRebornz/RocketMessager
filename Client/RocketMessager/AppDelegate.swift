@@ -135,6 +135,39 @@ final class ChatListBuilder: Buildable {
     }
 }
 
+struct ChatBuildData: BuildData {
+    let nickName: String
+    let socketManager: RMSocketManagerProtocol
+}
+
+final class ChatBuiler: Buildable {
+    typealias Product = ChatViewController
+    
+    func build(_ data: any BuildData) -> ChatViewController {
+        guard let builderData = data as? ChatBuildData else {
+            fatalError("Unsupported data type")
+        }
+        let dataProvider = MessageListDataProviderImpl(socketManager: builderData.socketManager)
+        let viewModel = ChatViewModel(messageDataProvider: dataProvider)
+        let viewController = ChatViewController(viewModel: viewModel)
+        
+        let titleModel = ChatNavigationControllerModel(
+            title: builderData.nickName,
+            subtitle: builderData.nickName,
+            avatar: UIImage()
+        )
+        
+        guard let result = ChatNavigationContollerConfigurator.configureChat(
+            viewController: viewController,
+            model: titleModel
+        ) as? ChatViewController else {
+            fatalError("Failed to configure chat view controller")
+        }
+        
+        return result
+    }
+}
+
 struct ChatNavigationControllerModel {
     let title: String
     let subtitle: String

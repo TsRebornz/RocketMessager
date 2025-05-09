@@ -21,6 +21,7 @@ protocol ChatListViewModelProtocol {
     var chatsPublished: Published<[ChatModel]> { get }
     
     func setup()
+    func selectedChat(chatModel: ChatModel)
 }
 
 public final class ChatListViewModel: ChatListViewModelProtocol {
@@ -63,6 +64,12 @@ public final class ChatListViewModel: ChatListViewModelProtocol {
                 self?.chats = users
             })
             .store(in: &anyCancellableSet)
+    }
+    
+    func selectedChat(chatModel: ChatModel) {
+        coordinator?.coordinateToChat(
+            chatInfo: .init(chatName: chatModel.nickName)
+        )
     }
 }
 

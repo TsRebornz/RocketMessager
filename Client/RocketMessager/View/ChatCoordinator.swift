@@ -9,6 +9,11 @@ import UIKit
 
 protocol ChatCoordinatorProtocol: AnyObject {
     func coordinateToChatList(name: String)
+    func coordinateToChat(chatInfo: ChatInfo)
+}
+
+struct ChatInfo {
+    var chatName: String
 }
 
 final class ChatCoordinator: ChatCoordinatorProtocol {
@@ -28,17 +33,21 @@ final class ChatCoordinator: ChatCoordinatorProtocol {
             socketManager: socketManager,
             coordinator: self
         )
-        let chatListBuilder: ChatListBuilder = ChatListBuilder()
+        let chatListBuilder = ChatListBuilder()
         let chatListViewController = chatListBuilder.build(chatListBuildData as BuildData)
         navigationController.pushViewController(chatListViewController, animated: true)
     }
     
-    struct ChatInfo {
-        var chatId: String
-        var chatName: String
-    }
-    
     func coordinateToChat(chatInfo: ChatInfo) {
-        // do nothing
+        let chatBuildData = ChatBuildData(
+            nickName: chatInfo.chatName,
+            socketManager: socketManager
+        )
+        let chatBuilder = ChatBuiler()
+        let chatViewController = chatBuilder.build(chatBuildData)
+        navigationController.pushViewController(
+            chatViewController,
+            animated: true
+        )
     }
 }
