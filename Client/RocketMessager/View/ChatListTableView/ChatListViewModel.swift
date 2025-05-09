@@ -36,11 +36,17 @@ public final class ChatListViewModel: ChatListViewModelProtocol {
     var chatsPublisher: Published<[ChatModel]>.Publisher { $chats }
     
     private let socketManager: RMSocketManagerProtocol
+    private weak var coordinator: ChatCoordinatorProtocol?
     private let nickName: String
     private var anyCancellableSet: Set<AnyCancellable> = []
     
-    init(socketManager: RMSocketManagerProtocol, nickName: String) {
+    init(
+        socketManager: RMSocketManagerProtocol,
+        coordinator: ChatCoordinatorProtocol,
+        nickName: String
+    ) {
         self.socketManager = socketManager
+        self.coordinator = coordinator
         self.nickName = nickName
     }
     

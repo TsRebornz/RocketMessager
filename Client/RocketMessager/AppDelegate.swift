@@ -115,6 +115,7 @@ protocol Buildable {
 struct ChatListBuildData: BuildData {
     let nickName: String
     let socketManager: RMSocketManagerProtocol
+    let coordinator: ChatCoordinatorProtocol
 }
 
 final class ChatListBuilder: Buildable {
@@ -127,6 +128,7 @@ final class ChatListBuilder: Buildable {
         
         let viewModel = ChatListViewModel(
             socketManager: builderData.socketManager,
+            coordinator: builderData.coordinator,
             nickName: builderData.nickName
         )
         return ChatListTableViewController(chatListViewModel: viewModel)
