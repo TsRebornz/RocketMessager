@@ -69,7 +69,7 @@ final class ChatViewController: UIViewController {
         view.backgroundColor = .systemBackground
         collectionView.setNeedsLayout()
         collectionView.layoutIfNeeded()
-        
+        viewModel.setup()
     }
         
     // MARK: - Public

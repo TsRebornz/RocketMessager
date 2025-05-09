@@ -67,17 +67,7 @@ protocol MessageListDataProvider {
 
 final class MessageListDataProviderImpl: MessageListDataProvider {
     private let socketManager: RMSocketManagerProtocol
-    
-    private let testMessages: [MessageModel] = [
-        .init(
-            text: "Hii",
-            senderName: "Valera",
-            sendDate: Date(),
-            type: .currentUser,
-            isLastMessage: false
-        )
-    ]
-    
+        
     private var messages = [MessageModel]()
     
     private var messageCurrentValueSubject = CurrentValueSubject<[MessageModel], Error>([])
@@ -92,9 +82,10 @@ final class MessageListDataProviderImpl: MessageListDataProvider {
     }
     
     func subscribe() -> AnyPublisher<[MessageModel], Error> {
-        guard let nickName else {
-            fatalError("nickName is nil")
-        }
+        // TODO: - Added nick comparsion in future
+//        guard let nickName else {
+//            fatalError("nickName is nil")
+//        }
         
         socketManager.chatPublisher.compactMap({ message -> MessageModel in
             guard let message else {
