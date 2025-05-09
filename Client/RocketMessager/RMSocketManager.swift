@@ -14,6 +14,8 @@ protocol RMSocketManagerProtocol {
     func sendMessage(_ string: String)
         
     var usersPublisher: AnyPublisher<[RMSocketManager.UserConnectUpdate], Error> { get }
+    
+    var chatPublisher: AnyPublisher<RMSocketManager.ChatMessage?, Error> { get }
 }
 
 public enum RMSocketError: Error {
@@ -55,6 +57,11 @@ final class RMSocketManager: RMSocketManagerProtocol {
     lazy var usersPublisher = currentUsersPubliser.eraseToAnyPublisher()
     
     private var currentUsersPubliser = CurrentValueSubject<[UserConnectUpdate], Error>([])
+    
+    
+    // FIXME: - Refactor
+    lazy var chatPublisher: AnyPublisher<ChatMessage?, any Error> = currentChatMessagePubliser.eraseToAnyPublisher()
+    private var currentChatMessagePubliser = CurrentValueSubject<ChatMessage?, Error>(nil)
 
     // MARK: - Private
     
@@ -85,6 +92,12 @@ final class RMSocketManager: RMSocketManagerProtocol {
     
     struct UserData {
         let nickName: String
+    }
+    
+    struct ChatMessage {
+        let nickName: String
+        let message: String
+        let dateString: String
     }
     
     struct UserConnectUpdate: Decodable {
@@ -153,11 +166,18 @@ final class RMSocketManager: RMSocketManagerProtocol {
             self?.currentUsersPubliser.send(users)
         }
         
-        socket.on("message") { dataArray, emitter in
-            guard let data = dataArray[0] as? NSDictionary else {
+        socket.on("message") { [weak self] dataArray, emitter in
+            guard let name = dataArray[0] as? String,
+                let message = dataArray[1] as? String,
+                let dateString = dataArray[2] as? String
+            else {
                 return
             }
-            print("message is \(data)")
+            
+            let chatMessage = ChatMessage(
+                nickName: name, message: message, dateString: dateString
+            )
+            self?.currentChatMessagePubliser.send(chatMessage)
         }
     }
     

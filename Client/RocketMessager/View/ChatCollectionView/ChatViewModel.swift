@@ -57,7 +57,6 @@ protocol MessageBuilder {
 
 protocol MessageListDataProvider {
     var nickName: String? { get set }
-    func getMessages(completionHandler: () -> Result<[MessageModel], Error>)
     func subscribe() -> AnyPublisher<[MessageModel], Error>
     func sendMessage(_ message: MessageModel)
     func isTyping() -> AnyPublisher<Bool, Error>
@@ -79,6 +78,12 @@ final class MessageListDataProviderImpl: MessageListDataProvider {
         )
     ]
     
+    private var messages = [MessageModel]()
+    
+    private var messageCurrentValueSubject = CurrentValueSubject<[MessageModel], Error>([])
+        
+    private var cancellables = Set<AnyCancellable>()
+    
     // FIXME: -
     var nickName: String?
     
@@ -91,14 +96,28 @@ final class MessageListDataProviderImpl: MessageListDataProvider {
             fatalError("nickName is nil")
         }
         
-        socketManager.connect(nickName)
-        return Just([]).mapError({ _ in
-            Fail<Any, Error>(error: NSErrorDomain(string: "error") as! any Error) as! any Error
-        }).eraseToAnyPublisher()
-    }
-    
-    func getMessages(completionHandler: () -> Result<[MessageModel], any Error>) {
-        // do nothing
+        socketManager.chatPublisher.compactMap({ message -> MessageModel in
+            guard let message else {
+                fatalError("")
+            }
+            let messageModel = MessageModel(
+                text: message.message,
+                senderName: nickName,
+                sendDate: Date(),
+                type: .other,
+                isLastMessage: false
+            )
+            return messageModel
+        }).sink(
+            receiveCompletion: { completion in },
+            receiveValue: { messageModel in
+                var newMessages: [MessageModel] = self.messageCurrentValueSubject.value
+                newMessages.append(messageModel)
+                self.messageCurrentValueSubject.send(newMessages)
+            }
+        ).store(in: &cancellables)
+                
+        return messageCurrentValueSubject.eraseToAnyPublisher()
     }
     
     func sendMessage(_ message: MessageModel) {
