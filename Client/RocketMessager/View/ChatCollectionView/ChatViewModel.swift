@@ -8,35 +8,6 @@
 import Foundation
 import Combine
 
-// MARK: - Test
-final class TestMessageBuilder: MessageBuilder {
-    
-    func build() -> [MessageModel] {
-        return [
-            .init(
-                text: "t1fdasfjdsaflasdjflajsdf;ljafdsafdsafsdffjdsaladfasfasfjfl;sadafasdfasfjf",
-                senderName: "s1",
-                sendDate: Date.now,
-                type: .other,
-                isLastMessage: true
-            ),
-            .init(
-                text: "testingt2testingtestingtestingtestingtestingtestingtestingtestingtestingtesting",
-                senderName: "s2",
-                sendDate: Date.now,
-                type: .currentUser,
-                isLastMessage: false
-            ),
-            .init(text: "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-                  senderName: "s3",
-                  sendDate: Date.now,
-                  type: .other,
-                  isLastMessage: false
-            )
-        ]
-    }
-}
-
 // MARK: - Extract to model
 enum MessageType {
     case currentUser
@@ -66,9 +37,8 @@ protocol MessageListDataProvider {
 /// Who must create MessageModel? ViewModel exactly
 
 final class MessageListDataProviderImpl: MessageListDataProvider {
+    
     private let socketManager: RMSocketManagerProtocol
-        
-    private var messages = [MessageModel]()
     
     private var messageCurrentValueSubject = CurrentValueSubject<[MessageModel], Error>([])
         
@@ -87,26 +57,25 @@ final class MessageListDataProviderImpl: MessageListDataProvider {
 //            fatalError("nickName is nil")
 //        }
         
-        socketManager.chatPublisher.compactMap({ message -> MessageModel in
-            guard let message else {
-                fatalError("")
-            }
-            let messageModel = MessageModel(
-                text: message.message,
-                senderName: nickName,
-                sendDate: Date(),
-                type: .other,
-                isLastMessage: false
-            )
-            return messageModel
-        }).sink(
-            receiveCompletion: { completion in },
-            receiveValue: { messageModel in
-                var newMessages: [MessageModel] = self.messageCurrentValueSubject.value
-                newMessages.append(messageModel)
-                self.messageCurrentValueSubject.send(newMessages)
-            }
-        ).store(in: &cancellables)
+        socketManager.chatPublisher.compactMap({ $0 })
+            .map({ message -> MessageModel in
+                let type: MessageType = message.nickName == self.nickName ? .currentUser : .other
+                let messageModel = MessageModel(
+                    text: message.message,
+                    senderName: message.nickName,
+                    sendDate: Date(),
+                    type: type,
+                    isLastMessage: false
+                )
+                return messageModel
+            }).sink(
+                receiveCompletion: { completion in },
+                receiveValue: { messageModel in
+                    var newMessages: [MessageModel] = self.messageCurrentValueSubject.value
+                    newMessages.append(messageModel)
+                    self.messageCurrentValueSubject.send(newMessages)
+                }
+            ).store(in: &cancellables)
                 
         return messageCurrentValueSubject.eraseToAnyPublisher()
     }
@@ -125,13 +94,20 @@ final class MessageListDataProviderImpl: MessageListDataProvider {
 
 protocol ChatViewModelProtocol {
     var messages: [MessageModel] { get }
+    var messagesPublisher: Published<[MessageModel]>.Publisher { get }
+    var messagesPublished: Published<[MessageModel]> { get }
     func sendMessage(_ message: MessageModel)
+    func setup()
 }
 
 final class ChatViewModel: ChatViewModelProtocol {
     
     @Published var messages = [MessageModel]()
     @Published var error: Error?
+    
+    var messagesPublisher: Published<[MessageModel]>.Publisher { $messages }
+    
+    var messagesPublished: Published<[MessageModel]> { _messages }
     
     private var cancellables: Set<AnyCancellable> = []
     
@@ -143,10 +119,6 @@ final class ChatViewModel: ChatViewModelProtocol {
     
     func setup() {
         messageDataProvider.subscribe()
-        // FIXME: Add error handling
-//            .mapError { [weak self] error in
-//                self?.error = error
-//            }
             .sink(receiveCompletion: { _ in
                 // do nothing
             }, receiveValue: { [weak self] messages in

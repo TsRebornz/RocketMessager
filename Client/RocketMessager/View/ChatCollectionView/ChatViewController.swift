@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 final class ChatViewController: UIViewController {
     
@@ -22,6 +23,8 @@ final class ChatViewController: UIViewController {
             static let inputTextFieldHorizontalSpacing: CGFloat = 16.0
         }
     }
+    
+    private var cancellables: Set<AnyCancellable> = []
     
     private let viewModel: ChatViewModelProtocol
     
@@ -42,6 +45,7 @@ final class ChatViewController: UIViewController {
         let button = UIButton()
         button.setImage(.chatSendButton, for: .normal)
         button.isHidden = true
+        button.addTarget(ChatViewController.self, action: #selector(didTapInputButton), for: .touchUpInside)
         return button
     }()
     
@@ -67,16 +71,27 @@ final class ChatViewController: UIViewController {
         setupLayout()
         // FIXME: Extract to design system colors
         view.backgroundColor = .systemBackground
-        collectionView.setNeedsLayout()
-        collectionView.layoutIfNeeded()
-        viewModel.setup()
+                
+        subscribeToViewModel()
     }
-        
+    
+    
     // MARK: - Public
     
     // MARK: - Private
     
     // MARK: - Private methods
+    
+    private func subscribeToViewModel() {
+        viewModel.setup()
+        
+        viewModel.messagesPublisher.sink(
+            receiveCompletion: { completion in},
+            receiveValue: { [collectionView] _ in
+                collectionView.reloadData()
+            }
+        ).store(in: &cancellables)
+    }
     
     private func setupLayout() {
         collectionView.setCollectionViewLayout(layout, animated: false)
@@ -98,7 +113,6 @@ final class ChatViewController: UIViewController {
         let viewBackground = UIView()
         view.addSubview(viewBackground)
         viewBackground.translatesAutoresizingMaskIntoConstraints = false
-        setupInputButton()
         
         let stackView = UIStackView(arrangedSubviews: [inputTextField, inputButton])
         stackView.spacing = Config.Constants.inputTextFieldHorizontalSpacing
@@ -118,10 +132,6 @@ final class ChatViewController: UIViewController {
                 inputTextField.heightAnchor.constraint(equalToConstant: 40),
             ]
         )
-    }
-    
-    private func setupInputButton() {
-        inputButton.addTarget(self, action: #selector(didTapInputButton), for: .touchUpInside)
     }
     
     @objc private func didTapInputButton() {
@@ -158,11 +168,6 @@ extension ChatViewController: UITextViewDelegate {
         }
     }
 }
-
-/*
- How to integrate Combine with
- func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
- */
 
 extension ChatViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
